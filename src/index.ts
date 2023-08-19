@@ -1,5 +1,15 @@
 import * as cp from 'child_process';
 
+class BatsResult {
+    output: string | number;
+    tempdir?: string;
+
+    constructor(output: string | number, tempdir?: string) {
+        this.output = output;
+        this.tempdir = tempdir;
+    }
+}
+
 interface BatsOptions {
     count?: boolean;
     noTempdirCleanup?: boolean;
@@ -7,7 +17,7 @@ interface BatsOptions {
     timing?: boolean;
 }
 
-export function bats(path: string = '.', options?: BatsOptions): string | number {
+export function bats(path: string = '.', options?: BatsOptions): BatsResult {
     let command = 'npx bats ' + path;
     if (options?.count) {
         command += ' --count';
@@ -31,7 +41,7 @@ export function bats(path: string = '.', options?: BatsOptions): string | number
     });
 
     if (options?.count) {
-        return parseInt(result.stdout.toString());
+        return new BatsResult(parseInt(result.stdout.toString()));
     }
-    return result.stdout.toString();
+    return new BatsResult(result.stdout.toString());
 }
