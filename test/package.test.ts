@@ -86,21 +86,23 @@ suite('test count tests', function () {
     });
 });
 
-suite('test parameter tests', function () {
-    test('single file test', function () {
-        const batsPath = './fixtures/bats_files/addition.bats';
-        const result = cp.spawnSync('npx bats ' + batsPath + ' --timing', {
+suite('tempdir tests', function () {
+    test('return value test', function () {
+        const batsPath = './fixtures/bats_files/';
+        const result = cp.spawnSync('npx bats ' + batsPath + ' --no-tempdir-cleanup --recursive', {
             'cwd': '.',
             'shell': true
         });
 
         assert.equal(
-            bats(batsPath, { timing: true }),
+            bats(batsPath, { noTempdirCleanup: true, recursive: true }),
             result.stdout.toString()
         );
     });
+});
 
-    test('single folder test', function () {
+suite('test parameter tests', function () {
+    test('timing test', function () {
         const batsPath = './fixtures/bats_files/';
         const result = cp.spawnSync('npx bats ' + batsPath + ' --timing', {
             'cwd': '.',
