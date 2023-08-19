@@ -1,39 +1,32 @@
 import * as cp from 'child_process';
 
-interface Bats {
-    (path: string): string;
-    count(path: string): number;
-    version: string;
+interface BatsOptions {
+    count?: boolean;
+    recursive?: boolean;
+    timing?: boolean;
 }
 
-function getVersion(): string {
-    const result = cp.spawnSync('npx bats --version', {
+export function bats(path: string = '.', options?: BatsOptions): string | number {
+    let command = 'npx bats ' + path;
+    if (options?.count) {
+        command += ' --count';
+    }
+
+    if (options?.recursive) {
+        command += ' --recursive';
+    }
+
+    if (options?.timing) {
+        command += ' --timing';
+    }
+
+    const result = cp.spawnSync(command, {
         'cwd': '.',
         'shell': true
     });
+
+    if (options?.count) {
+        return parseInt(result.stdout.toString());
+    }
     return result.stdout.toString();
 }
-
-function getBats(): Bats {
-    const bats = function (path: string) {
-        const result = cp.spawnSync('npx bats ' + path, {
-            'cwd': '.',
-            'shell': true
-        });
-        return result.stdout.toString();
-    } as Bats;
-
-    bats.count = function (path: string): number {
-        const result = cp.spawnSync('npx bats ' + path + ' -c', {
-            'cwd': '.',
-            'shell': true
-        });
-        return parseInt(result.stdout.toString());
-    };
-
-    bats.version = getVersion();
-
-    return bats;
-}
-
-export const bats = getBats();
