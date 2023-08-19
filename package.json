@@ -1,0 +1,39 @@
+{
+  "name": "bats-js",
+  "displayName": "Bats JS",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./out/src/main.js",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "lint": "eslint src --ext ts",
+    "pretest": "npm run compile && npm run lint",
+    "test": "mocha",
+    "watch": "tsc -watch -p ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/targendaz2/bats-js.git"
+  },
+  "author": "David Rosenberg",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/targendaz2/bats-js/issues"
+  },
+  "homepage": "https://github.com/targendaz2/bats-js#readme",
+  "devDependencies": {
+    "@tsconfig/node14": "^14.1.0",
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.5.1",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "chai": "^4.3.7",
+    "eslint": "^8.47.0",
+    "mocha": "^10.2.0",
+    "typescript": "^5.1.6"
+  },
+  "peerDependencies": {
+    "bats": "^1.10.0"
+  }
+}
