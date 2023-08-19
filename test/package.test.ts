@@ -6,13 +6,27 @@ import { bats } from '../src/index';
 
 suite('Default Bats usage tests', function () {
     test('single file test', function () {
-        const result = cp.spawnSync('npx bats ./fixtures/bats_files/addition.bats', {
+        const batsPath = './fixtures/bats_files/addition.bats';
+        const result = cp.spawnSync('npx bats ' + batsPath, {
             'cwd': '.',
             'shell': true
         });
         
         assert.equal(
-            bats('../fixtures/bats_files/addition.bats'),
+            bats(batsPath),
+            result.stdout.toString()
+        );
+    });
+
+    test('single folder test', function () {
+        const batsPath = './fixtures/bats_files/';
+        const result = cp.spawnSync('npx bats ' + batsPath, {
+            'cwd': '.',
+            'shell': true
+        });
+
+        assert.equal(
+            bats(batsPath),
             result.stdout.toString()
         );
     });
