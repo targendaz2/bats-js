@@ -4,7 +4,21 @@ import * as cp from 'child_process';
 
 import { bats } from '../src/index';
 
-suite('Default Bats usage tests', function () {
+suite('Basic parameter tests', function () {
+    test('version test', function () {
+        const result = cp.spawnSync('npx bats --version', {
+            'cwd': '.',
+            'shell': true
+        });
+
+        assert.equal(
+            bats.version,
+            result.stdout.toString()
+        );
+    });
+});
+
+suite('Test running tests', function () {
     test('single file test', function () {
         const batsPath = './fixtures/bats_files/addition.bats';
         const result = cp.spawnSync('npx bats ' + batsPath, {
@@ -32,7 +46,7 @@ suite('Default Bats usage tests', function () {
     });
 });
 
-suite('Bats count tests', function () {
+suite('Test count tests', function () {
     test('single file test', function () {
         const batsPath = './fixtures/bats_files/addition.bats';
         const result = cp.spawnSync('npx bats ' + batsPath + ' -c', {
