@@ -3,12 +3,12 @@
   "displayName": "Bats JS",
   "version": "0.1.0",
   "description": "",
-  "main": "./out/src/main.js",
+  "main": "./out/src/index.js",
   "scripts": {
     "compile": "tsc -p ./",
     "lint": "eslint src --ext ts",
     "pretest": "npm run compile && npm run lint",
-    "test": "mocha",
+    "test": "mocha ./out/test",
     "watch": "tsc -watch -p ./"
   },
   "repository": {
