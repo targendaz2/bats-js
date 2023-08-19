@@ -31,3 +31,31 @@ suite('Default Bats usage tests', function () {
         );
     });
 });
+
+suite('Bats count tests', function () {
+    test('single file test', function () {
+        const batsPath = './fixtures/bats_files/addition.bats';
+        const result = cp.spawnSync('npx bats ' + batsPath + ' -c', {
+            'cwd': '.',
+            'shell': true
+        });
+
+        assert.equal(
+            bats.count(batsPath),
+            parseInt(result.stdout.toString())
+        );
+    });
+
+    test('single folder test', function () {
+        const batsPath = './fixtures/bats_files/';
+        const result = cp.spawnSync('npx bats ' + batsPath + ' -c', {
+            'cwd': '.',
+            'shell': true
+        });
+
+        assert.equal(
+            bats.count(batsPath),
+            parseInt(result.stdout.toString())
+        );
+    });
+});
