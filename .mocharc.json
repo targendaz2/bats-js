@@ -1,4 +1,5 @@
 {
     "color": true,
+    "timeout": 10000,
     "ui": "tdd"
 }

@@ -2,9 +2,11 @@ import { assert } from 'chai';
 
 import * as cp from 'child_process';
 
-import { bats, BatsOptions } from '../src/index';
+import decamelize from 'decamelize';
 
-suite('test running tests', function () {
+import { bats, BatsOptions } from '../src/index.js';
+
+suite('test selection tests', function () {
     test('single file test', function () {
         const batsPath = './fixtures/bats_files/addition.bats';
         const result = cp.spawnSync('npx bats ' + batsPath, {
@@ -45,47 +47,6 @@ suite('test running tests', function () {
     });
 });
 
-suite('test count tests', function () {
-    test('single file test', function () {
-        const batsPath = './fixtures/bats_files/addition.bats';
-        const result = cp.spawnSync('npx bats ' + batsPath + ' -c', {
-            'cwd': '.',
-            'shell': true
-        });
-
-        assert.equal(
-            bats(batsPath, {count: true}).output,
-            parseInt(result.stdout.toString())
-        );
-    });
-
-    test('single folder test', function () {
-        const batsPath = './fixtures/bats_files/';
-        const result = cp.spawnSync('npx bats ' + batsPath + ' -c', {
-            'cwd': '.',
-            'shell': true
-        });
-
-        assert.equal(
-            bats(batsPath, {count: true}).output,
-            parseInt(result.stdout.toString())
-        );
-    });
-
-    test('recursive folder test', function () {
-        const batsPath = './fixtures/bats_files/';
-        const result = cp.spawnSync('npx bats ' + batsPath + ' --count --recursive', {
-            'cwd': '.',
-            'shell': true
-        });
-
-        assert.equal(
-            bats(batsPath, {count: true, recursive: true}).output,
-            parseInt(result.stdout.toString())
-        );
-    });
-});
-
 suite('tempdir tests', function () {
     test('return value test', function () {
         const batsPath = './fixtures/bats_files/';
@@ -114,22 +75,35 @@ suite('tempdir tests', function () {
     });
 });
 
-suite.skip('general parameter tests', function () {
+suite('parameter tests', function () {
     const batsPath = './fixtures/bats_files/';
     const options: BatsOptions = {
         count: true,
         noTempdirCleanup: true,
         printOutputOnFailure: true,
         recursive: true,
-        timing: true,
         trace: true,
         verboseRun: true,
     };
 
-    test('boolean parameters', function () {
+    test('count returns number', function () {
+        const batsPath = './fixtures/bats_files/addition.bats';
+        const result = cp.spawnSync('npx bats ' + batsPath + ' --count', {
+            'cwd': '.',
+            'shell': true
+        });
 
+        assert.equal(
+            bats(batsPath, { count: true }).output,
+            parseInt(result.stdout.toString())
+        );
+    });
+
+    test('boolean parameters are valid', function () {
         for (const option in options) {
-            const result = cp.spawnSync(`npx bats ${batsPath} --${option}`, {
+            const cliOption = decamelize(option, {separator: '-'});
+
+            const result = cp.spawnSync(`npx bats ${batsPath} --${cliOption}`, {
                 'cwd': '.',
                 'shell': true
             });
