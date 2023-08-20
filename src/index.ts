@@ -1,7 +1,23 @@
 import * as cp from 'child_process';
 
-
-type BatsOption = 'count' | 'noTempdirCleanup' | 'recursive' | 'timing';
+export interface BatsOptions {
+    [option: string]: boolean | undefined;
+    
+    /** Count test cases without running any tests */
+    count?: boolean;
+    /** Preserve test output temporary directory */
+    noTempdirCleanup?: boolean;
+    /** Automatically print the value of `$output` on failed tests */
+    printOutputOnFailure?: boolean;
+    /** Include tests in subdirectories */
+    recursive?: boolean;
+    /** Add timing information to tests */
+    timing?: boolean;
+    /** Print test commands as they are executed (like `set -x`) */
+    trace?: boolean;
+    /** Make `run` print `$output` by default */
+    verboseRun?: boolean;
+}
 
 class BatsResult {
     output: string | number;
@@ -13,22 +29,22 @@ class BatsResult {
     }
 }
 
-export function bats(path: string = '.', options?: BatsOption[]): BatsResult {
-    let command = 'npx bats ' + path;
+export function bats(tests: string = '.', options?: BatsOptions): BatsResult {
+    let command = 'npx bats ' + tests;
 
-    if (options?.includes('count')) {
+    if (options?.count) {
         command += ' --count';
     }
 
-    if (options?.includes('noTempdirCleanup')) {
+    if (options?.noTempdirCleanup) {
         command += ' --no-tempdir-cleanup';
     }
 
-    if (options?.includes('recursive')) {
+    if (options?.recursive) {
         command += ' --recursive';
     }
 
-    if (options?.includes('timing')) {
+    if (options?.timing) {
         command += ' --timing';
     }
 
@@ -37,7 +53,7 @@ export function bats(path: string = '.', options?: BatsOption[]): BatsResult {
         'shell': true
     });
 
-    if (options?.includes('count')) {
+    if (options?.count) {
         return new BatsResult(parseInt(result.stdout.toString()));
     }
     return new BatsResult(result.stdout.toString());
