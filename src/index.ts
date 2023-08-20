@@ -1,5 +1,7 @@
 import * as cp from 'child_process';
 
+import decamelize from 'decamelize';
+
 export interface BatsOptions {
     /** Count test cases without running any tests */
     count?: boolean;
@@ -60,48 +62,19 @@ class BatsResult {
 export function bats(tests: string = '.', options?: BatsOptions): BatsResult {
     let command = 'npx bats ' + tests;
 
-    if (options?.count) {
-        command += ' --count';
-    }
-
-    if (options?.filter) {
-        command += ` --filter ${options.filter}`;
-    }
-
-    if (options?.filterStatus) {
-        command += ` --filter-status ${options.filterStatus}`;
-    }
-
-    if (options?.filterTags) {
-        command += ` --filter-tags ${options.filterTags}`;
-    }
-
-    if (options?.formatter) {
-        command += ` --formatter ${options.formatter}`;
-    }
-
-    if (options?.jobs) {
-        command += ` --jobs ${options.jobs}`;
-    }
-
-    if (options?.noTempdirCleanup) {
-        command += ' --no-tempdir-cleanup';
-    }
-
-    if (options?.noParallelizeAcrossFiles) {
-        command += ' --no-parallelize-across-files';
-    }
-
-    if (options?.noParallelizeWithinFiles) {
-        command += ' --no-parallelize-within-files';
-    }
-
-    if (options?.pretty) {
-        command += ' --pretty';
-    }
-
-    if (options?.recursive) {
-        command += ' --recursive';
+    if (options) {
+        for (const [option, value] of Object.entries(options)) {
+            switch (typeof value) {
+                case 'boolean':
+                    if (value === true) {
+                        command += ' --' + decamelize(option, { separator: '-' });
+                    }
+                    break;
+                default:
+                    command += ' --' + decamelize(option, { separator: '-' });
+                    command += ' ' + value;
+            }
+        }
     }
 
     const result = cp.spawnSync(command, {
