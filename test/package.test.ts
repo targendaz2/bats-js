@@ -86,8 +86,28 @@ suite('parameter tests', function () {
         verboseRun: true,
     };
 
+    const testBoolOption = (option: string) => function () {
+        const cliOption = decamelize(option, { separator: '-' });
+
+        const result = cp.spawnSync(`npx bats ${batsPath} --${cliOption}`, {
+            'cwd': '.',
+            'shell': true
+        });
+
+        const tempOptions: BatsOptions = {};
+        tempOptions[option] = true;
+
+        assert.equal(
+            bats(batsPath, tempOptions).output,
+            result.stdout.toString()
+        );
+    };
+
+    for (const option in options) {
+        test(`${option} is a valid boolean option`, testBoolOption(option));
+    }
+
     test('count returns number', function () {
-        const batsPath = './fixtures/bats_files/addition.bats';
         const result = cp.spawnSync('npx bats ' + batsPath + ' --count', {
             'cwd': '.',
             'shell': true
@@ -97,24 +117,5 @@ suite('parameter tests', function () {
             bats(batsPath, { count: true }).output,
             parseInt(result.stdout.toString())
         );
-    });
-
-    test('boolean parameters are valid', function () {
-        for (const option in options) {
-            const cliOption = decamelize(option, {separator: '-'});
-
-            const result = cp.spawnSync(`npx bats ${batsPath} --${cliOption}`, {
-                'cwd': '.',
-                'shell': true
-            });
-
-            const tempOptions: BatsOptions = {};
-            tempOptions[option] = true;
-
-            assert.equal(
-                bats(batsPath, tempOptions).output,
-                result.stdout.toString()
-            );
-        }
     });
 });
