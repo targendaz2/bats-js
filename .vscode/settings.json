@@ -9,5 +9,8 @@
     "cSpell.words": [
         "decamelize",
         "tempdir"
+    ],
+    "cSpell.ignoreWords": [
+        "shenwei"
     ]
 }
