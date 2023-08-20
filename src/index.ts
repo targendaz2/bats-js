@@ -1,10 +1,10 @@
 import * as cp from 'child_process';
 
 export interface BatsOptions {
-    [option: string]: boolean | undefined;
-    
     /** Count test cases without running any tests */
     count?: boolean;
+    /** Only run tests that match the regular expression */
+    filter?: string;
     /** Preserve test output temporary directory */
     noTempdirCleanup?: boolean;
     /** Automatically print the value of `$output` on failed tests */
@@ -34,6 +34,10 @@ export function bats(tests: string = '.', options?: BatsOptions): BatsResult {
 
     if (options?.count) {
         command += ' --count';
+    }
+
+    if (options?.filter) {
+        command += ` --filter ${options.filter}`;
     }
 
     if (options?.noTempdirCleanup) {

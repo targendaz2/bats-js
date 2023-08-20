@@ -11,6 +11,7 @@ suite('CLI parity tests', function () {
         ['./fixtures/bats_files/addition.bats'],
         ['./fixtures/bats_files/'],
         ['./fixtures/bats_files/', { count: true }],
+        ['./fixtures/bats_files/', { filter: 'Addition*' }],
         ['./fixtures/bats_files/', { noTempdirCleanup: true }],
         ['./fixtures/bats_files/', { printOutputOnFailure: true }],
         ['./fixtures/bats_files/', { recursive: true }],
@@ -23,8 +24,19 @@ suite('CLI parity tests', function () {
         let command = `npx bats ${tests}`;
 
         // parse options into command
-        for (const option in options) {
-            command += ' --' + decamelize(option, { separator: '-' });
+        if (options) {
+            for (const [option, value] of Object.entries(options)) {
+                switch (typeof value) {
+                    case 'boolean':
+                        if (value === true) {
+                            command += ' --' + decamelize(option, { separator: '-' });
+                        }
+                        break;
+                    default:
+                        command += ' --' + decamelize(option, { separator: '-' });
+                        command += ' ' + value;
+                }
+            }
         }
 
         const result = cp.spawnSync(command, {
@@ -42,8 +54,19 @@ suite('CLI parity tests', function () {
         let command = `bats ${tests}`;
 
         // parse options into command
-        for (const option in options) {
-            command += ' --' + decamelize(option, { separator: '-' });
+        if (options) {
+            for (const [option, value] of Object.entries(options)) {
+                switch (typeof value) {
+                    case 'boolean':
+                        if (value === true) {
+                            command += ' --' + decamelize(option, { separator: '-' });
+                        }
+                        break;
+                    default:
+                        command += ' --' + decamelize(option, { separator: '-' });
+                        command += ' ' + value;
+                } 
+            }
         }
 
         test(`parity for "${command}"`, testBatsCommand(tests, options));
