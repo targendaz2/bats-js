@@ -1,5 +1,8 @@
 import * as cp from 'child_process';
 
+
+type BatsOption = 'count' | 'noTempdirCleanup' | 'recursive' | 'timing';
+
 class BatsResult {
     output: string | number;
     tempdir?: string;
@@ -10,28 +13,22 @@ class BatsResult {
     }
 }
 
-interface BatsOptions {
-    count?: boolean;
-    noTempdirCleanup?: boolean;
-    recursive?: boolean;
-    timing?: boolean;
-}
-
-export function bats(path: string = '.', options?: BatsOptions): BatsResult {
+export function bats(path: string = '.', options?: BatsOption[]): BatsResult {
     let command = 'npx bats ' + path;
-    if (options?.count) {
+
+    if (options?.includes('count')) {
         command += ' --count';
     }
 
-    if (options?.noTempdirCleanup) {
+    if (options?.includes('noTempdirCleanup')) {
         command += ' --no-tempdir-cleanup';
     }
 
-    if (options?.recursive) {
+    if (options?.includes('recursive')) {
         command += ' --recursive';
     }
 
-    if (options?.timing) {
+    if (options?.includes('timing')) {
         command += ' --timing';
     }
 
@@ -40,7 +37,7 @@ export function bats(path: string = '.', options?: BatsOptions): BatsResult {
         'shell': true
     });
 
-    if (options?.count) {
+    if (options?.includes('count')) {
         return new BatsResult(parseInt(result.stdout.toString()));
     }
     return new BatsResult(result.stdout.toString());

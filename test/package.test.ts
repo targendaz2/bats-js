@@ -39,7 +39,7 @@ suite('test running tests', function () {
         });
 
         assert.equal(
-            bats(batsPath, { recursive: true }).output,
+            bats(batsPath, ['recursive']).output,
             result.stdout.toString()
         );
     });
@@ -54,7 +54,7 @@ suite('test count tests', function () {
         });
 
         assert.equal(
-            bats(batsPath, { count: true }).output,
+            bats(batsPath, ['count']).output,
             parseInt(result.stdout.toString())
         );
     });
@@ -67,7 +67,7 @@ suite('test count tests', function () {
         });
 
         assert.equal(
-            bats(batsPath, { count: true }).output,
+            bats(batsPath, ['count']).output,
             parseInt(result.stdout.toString())
         );
     });
@@ -80,7 +80,7 @@ suite('test count tests', function () {
         });
 
         assert.equal(
-            bats(batsPath, { count: true, recursive: true }).output,
+            bats(batsPath, ['count', 'recursive']).output,
             parseInt(result.stdout.toString())
         );
     });
@@ -95,7 +95,7 @@ suite('tempdir tests', function () {
         });
 
         assert.equal(
-            bats(batsPath, { noTempdirCleanup: true, recursive: true }).output,
+            bats(batsPath, ['noTempdirCleanup', 'recursive']).output,
             result.stdout.toString()
         );
     });
@@ -109,7 +109,7 @@ suite('tempdir tests', function () {
 
         assert.include(
             result.stdout.toString(),
-            bats(batsPath, { noTempdirCleanup: true, recursive: true }).tempdir as string
+            bats(batsPath, ['noTempdirCleanup', 'recursive']).tempdir as string
         );
     });
 });
@@ -123,7 +123,7 @@ suite.skip('test parameter tests', function () {
         });
 
         assert.equal(
-            bats(batsPath, { timing: true }).output,
+            bats(batsPath, ['timing']).output,
             result.stdout.toString()
         );
     });
