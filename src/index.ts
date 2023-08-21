@@ -20,7 +20,7 @@ export interface BatsOptions {
      * 
      * You can negate a tag via prepending '!'.
      * */
-    filterTags?: string;
+    filterTags?: string[] | string;
     /** Switch between formatters: pretty (default), tap (default w/o term), tap13, junit */
     formatter?: 'pretty' | 'tap' | 'tap13' | 'junit';
     /** Number of parallel jobs (requires GNU parallel or shenwei356/rush) */
