@@ -6,11 +6,17 @@ import decamelize from 'decamelize';
 
 import { bats, BatsOptions } from '../src/index.js';
 
-suite('CLI parity tests', function () {
+suite('option parity tests', function () {
     const batsCommands: [string, BatsOptions?][] = [
         ['./fixtures/bats_files/addition.bats'],
         ['./fixtures/bats_files/'],
         ['./fixtures/bats_files/', { count: true }],
+        ['./fixtures/bats_files/', { codeQuoteStyle: '""' }],
+        ['./fixtures/bats_files/', { codeQuoteStyle: '--' }],
+        ['./fixtures/bats_files/', { lineReferenceFormat: 'comma_line' }],
+        ['./fixtures/bats_files/', { lineReferenceFormat: 'colon' }],
+        ['./fixtures/bats_files/', { lineReferenceFormat: 'uri' }],
+        ['./fixtures/bats_files/', { lineReferenceFormat: 'custom' }],
         ['./fixtures/bats_files/', { filter: /addition/ }],
         ['./fixtures/bats_files/', { filterStatus: 'failed' }],
         ['./fixtures/bats_files/', { filterStatus: 'missed' }],
@@ -90,3 +96,9 @@ suite('CLI parity tests', function () {
         test(`parity for "${command}"`, testBatsCommand(tests, options));
     });
 });
+
+// suite('not implemented option tests', function () {
+//     const batsCommands = [
+
+//     ];
+// });

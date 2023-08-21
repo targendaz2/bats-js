@@ -5,6 +5,21 @@ import decamelize from 'decamelize';
 export interface BatsOptions {
     /** Count test cases without running any tests */
     count?: boolean;
+    /** 
+     * A two character string of code quote delimiters
+     * or 'custom' which requires setting $BATS_BEGIN_CODE_QUOTE and
+     * $BATS_END_CODE_QUOTE. Can also be set via $BATS_CODE_QUOTE_STYLE
+     * */
+    codeQuoteStyle?: string;
+    /**
+     * Controls how file/line references e.g. in stack traces are printed:
+     * * comma_line (default): a.bats, line 1
+     * * colon:  a.bats:1
+     * * uri: file:///tests/a.bats:1
+     * * custom: provide your own via defining bats_format_file_line_reference_custom
+     *   with parameters <filename> <line>, store via `printf -v "$output"`
+     * */
+    lineReferenceFormat?: 'comma_line' | 'colon' | 'uri' | 'custom';
     /** Only run tests that match the regular expression */
     filter?: RegExp;
     /** 
