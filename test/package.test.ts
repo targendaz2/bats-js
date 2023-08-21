@@ -5,6 +5,7 @@ import * as cp from 'child_process';
 import decamelize from 'decamelize';
 
 import { bats, BatsOptions } from '../src/index.js';
+import { NotImplementedError } from '../src/errors.js';
 
 suite('option parity tests', function () {
     const batsCommands: [string, BatsOptions?][] = [
@@ -97,8 +98,30 @@ suite('option parity tests', function () {
     });
 });
 
-// suite('not implemented option tests', function () {
-//     const batsCommands = [
+suite('not implemented option tests', function () {
+    const batsCommands:BatsOptions[] = [
+        // @ts-ignore
+        { gatherTestOutputsIn: '/path/to/directory' },
+        // @ts-ignore
+        { help: true },
+        // @ts-ignore
+        { reportFormatter: 'pretty' },
+        // @ts-ignore
+        { output: '/path/to/directory' },
+        // @ts-ignore
+        { timing: true },
+        // @ts-ignore
+        { version: true },
+    ];
 
-//     ];
-// });
+    const testOptionNotImplemented = (options: BatsOptions) => function () {        
+        assert.throws(() => bats('./fixtures/bats_files/', options), NotImplementedError);
+    };
+
+    batsCommands.forEach(options => {
+        for (const [option, value] of Object.entries(options)) {
+            test(`"${option}" is not implemented`, testOptionNotImplemented(options));
+            break;
+        }
+    });
+});

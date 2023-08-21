@@ -2,6 +2,8 @@ import * as cp from 'child_process';
 
 import decamelize from 'decamelize';
 
+import { NotImplementedError } from './errors.js';
+
 export interface BatsOptions {
     /** Count test cases without running any tests */
     count?: boolean;
@@ -38,6 +40,19 @@ export interface BatsOptions {
     filterTags?: string[] | string;
     /** Switch between formatters: pretty (default), tap (default w/o term), tap13, junit */
     formatter?: 'pretty' | 'tap' | 'tap13' | 'junit';
+    /** 
+     * NOT IMPLEMENTED
+     * 
+     * Gather the output of failing *and* passing tests
+     * as files in directory (if existing, must be empty) 
+     * */
+    gatherTestOutputsIn?: never;
+    /** 
+     * NOT IMPLEMENTED
+     * 
+     * Display the help message
+     * */
+    help?: never;
     /** Number of parallel jobs (requires GNU parallel or shenwei356/rush) */
     jobs?: number;
     /** Name of parallel binary */
@@ -48,21 +63,54 @@ export interface BatsOptions {
     noParallelizeAcrossFiles?: boolean;
     /** Serialize test execution within files instead of running them in parallel (requires jobs >1) */
     noParallelizeWithinFiles?: boolean;
+    /** 
+     * NOT IMPLEMENTED
+     * 
+     * Directory to write report files (must exist)
+     */
+    output?: never;
     /** Shorthand for "formatter pretty" */
     pretty?: boolean;
     /** Automatically print the value of `$output` on failed tests */
     printOutputOnFailure?: boolean;
     /** Include tests in subdirectories */
     recursive?: boolean;
+    /** 
+     * NOT IMPLEMENTED
+     * 
+     * Switch between reporters (same options as formatter)
+     * */
+    reportFormatter?: never;
     /** Print output of passing tests */
     showOutputOfPassingTests?: boolean;
     /** Shorthand for "formatter tap" */
     tap?: boolean;
+    /**
+     * NOT IMPLEMENTED
+     * 
+     * Add timing information to tests
+     */
+    timing?: never;
     /** Print test commands as they are executed (like `set -x`) */
     trace?: boolean;
     /** Make `run` print `$output` by default */
     verboseRun?: boolean;
+    /**
+     * NOT IMPLEMENTED
+     * 
+     * Display the version number
+     */
+    version?: never;
 }
+
+const notImplementedOptions = [
+    'gatherTestOutputsIn',
+    'help',
+    'reportFormatter',
+    'output',
+    'timing',
+    'version',
+];
 
 class BatsResult {
     output: string | number;
@@ -79,6 +127,10 @@ export function bats(tests: string = '.', options?: BatsOptions): BatsResult {
 
     if (options) {
         for (const [option, value] of Object.entries(options)) {
+            if (notImplementedOptions.includes(option)) {
+                throw new NotImplementedError();
+            }
+
             switch (typeof value) {
                 case 'boolean':
                     if (value === true) {
@@ -88,6 +140,7 @@ export function bats(tests: string = '.', options?: BatsOptions): BatsResult {
                 default:
                     command += ' --' + decamelize(option, { separator: '-' });
                     command += ' ' + value;
+                    break;
             }
         }
     }
