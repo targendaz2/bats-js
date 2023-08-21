@@ -6,7 +6,7 @@ export interface BatsOptions {
     /** Count test cases without running any tests */
     count?: boolean;
     /** Only run tests that match the regular expression */
-    filter?: string;
+    filter?: RegExp;
     /** 
      * Only run tests with the given status in the last completed (no CTRL+C/SIGINT) run.
      * 

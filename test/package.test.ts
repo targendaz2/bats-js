@@ -11,7 +11,7 @@ suite('CLI parity tests', function () {
         ['./fixtures/bats_files/addition.bats'],
         ['./fixtures/bats_files/'],
         ['./fixtures/bats_files/', { count: true }],
-        ['./fixtures/bats_files/', { filter: 'Addition*' }],
+        ['./fixtures/bats_files/', { filter: /addition/ }],
         ['./fixtures/bats_files/', { filterStatus: 'failed' }],
         ['./fixtures/bats_files/', { filterStatus: 'missed' }],
         ['./fixtures/bats_files/', { filterTags: 'tag1,tag2' }],
@@ -34,7 +34,7 @@ suite('CLI parity tests', function () {
         ['./fixtures/bats_files/', { trace: true }],
         ['./fixtures/bats_files/', { verboseRun: true }],
         ['./fixtures/bats_files/', { count: true, noTempdirCleanup: true, recursive: true }],
-        ['./fixtures/bats_files/', { count: true, filter: 'addition', noTempdirCleanup: true, recursive: true }],
+        ['./fixtures/bats_files/', { count: true, filter: /addition/, noTempdirCleanup: true, recursive: true }],
     ];
 
     const testBatsCommand = (tests: string, options?: BatsOptions) => function () {
