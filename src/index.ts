@@ -2,6 +2,7 @@ import * as cp from 'child_process';
 
 import decamelize from 'decamelize';
 
+import { formatOption } from './formatting.js';
 import { NotImplementedError } from './errors.js';
 
 export interface BatsOptions {
@@ -131,16 +132,9 @@ export function bats(tests: string = '.', options?: BatsOptions): BatsResult {
                 throw new NotImplementedError();
             }
 
-            switch (typeof value) {
-                case 'boolean':
-                    if (value === true) {
-                        command += ' --' + decamelize(option, { separator: '-' });
-                    }
-                    break;
-                default:
-                    command += ' --' + decamelize(option, { separator: '-' });
-                    command += ' ' + value;
-                    break;
+            const formattedOption = formatOption(option, value);
+            if (formattedOption) {
+                command += ' ' + formattedOption;
             }
         }
     }

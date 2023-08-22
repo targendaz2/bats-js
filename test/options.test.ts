@@ -5,6 +5,7 @@ import * as cp from 'child_process';
 import decamelize from 'decamelize';
 
 import { bats, BatsOptions } from '../src/index.js';
+import { formatOption } from '../src/formatting.js';
 import { NotImplementedError } from '../src/errors.js';
 
 suite('option parity tests', function () {
@@ -51,15 +52,9 @@ suite('option parity tests', function () {
         // parse options into command
         if (options) {
             for (const [option, value] of Object.entries(options)) {
-                switch (typeof value) {
-                    case 'boolean':
-                        if (value === true) {
-                            command += ' --' + decamelize(option, { separator: '-' });
-                        }
-                        break;
-                    default:
-                        command += ' --' + decamelize(option, { separator: '-' });
-                        command += ' ' + value;
+                const formattedOption = formatOption(option, value);
+                if (formattedOption) {
+                    command += ' ' + formattedOption;
                 }
             }
         }
@@ -81,16 +76,10 @@ suite('option parity tests', function () {
         // parse options into command
         if (options) {
             for (const [option, value] of Object.entries(options)) {
-                switch (typeof value) {
-                    case 'boolean':
-                        if (value === true) {
-                            command += ' --' + decamelize(option, { separator: '-' });
-                        }
-                        break;
-                    default:
-                        command += ' --' + decamelize(option, { separator: '-' });
-                        command += ' ' + value;
-                } 
+                const formattedOption = formatOption(option, value);
+                if (formattedOption) {
+                    command += ' ' + formattedOption;
+                }
             }
         }
 
@@ -123,5 +112,33 @@ suite('not implemented option tests', function () {
             test(`"${option}" is not implemented`, testOptionNotImplemented(options));
             break;
         }
+    });
+});
+
+suite('option formatting tests', function () {
+    type OptionToTest = [string, any, string | null];
+    const optionsToTest: OptionToTest[] = [
+        ['count', true, '--count'],
+        ['count', false, null],
+        ['lineReferenceFormat', 'colon', '--line-reference-format colon'],
+        ['filter', /subtraction/, '--filter subtraction'],
+        ['filterTags', ['tag1', 'tag2', 'tag3'], '--filter-tags tag1,tag2,tag3'],
+        ['noTempdirCleanup', true, '--no-tempdir-cleanup'],
+        ['noTempdirCleanup', false, null],
+    ];
+
+    const testBatsOptionParsing = (optionToTest: OptionToTest) => function () {
+        const [option, value, expectedOutput] = optionToTest;
+        const actualOutput = formatOption(option, value);
+
+        assert.equal(
+            actualOutput,
+            expectedOutput,
+        );
+    };
+
+    optionsToTest.forEach(optionToTest => {
+        const [option, value, _] = optionToTest;
+        test(`format "${option}: ${value}"`, testBatsOptionParsing(optionToTest));
     });
 });
