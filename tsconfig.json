@@ -1,5 +1,5 @@
 {
-    "extends": "@tsconfig/node-lts/tsconfig.json",
+    "extends": "@tsconfig/node-lts/tsconfig",
     "compilerOptions": {
         "outDir": "out",
         "sourceMap": true,

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/package",
   "name": "bats-js",
   "displayName": "Bats JS",
   "version": "0.1.0",
