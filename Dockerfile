@@ -3,7 +3,7 @@ FROM node:lts
 RUN apt-get update && \
     apt-get install -y git gnupg2 zsh
 
-WORKDIR /usr/src/app
+WORKDIR /workspaces/bats-js
 
 COPY ["package.json", "package-lock.json*", "./"]
 
@@ -11,7 +11,7 @@ RUN npm install --silent
 
 COPY . .
 
-RUN chown -R node /usr/src/app
+RUN chown -R node /workspaces/bats-js
 
 RUN usermod --shell /bin/zsh node
 
