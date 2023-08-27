@@ -1,7 +1,5 @@
 import * as cp from 'child_process';
 
-import decamelize from 'decamelize';
-
 import { formatOption } from './formatting.js';
 import { NotImplementedError } from './errors.js';
 
@@ -124,7 +122,7 @@ class BatsResult {
 }
 
 export function bats(tests: string = '.', options?: BatsOptions): BatsResult {
-    let command = 'npx bats ' + tests;
+    let command = `bats ${tests}`;
 
     if (options) {
         for (const [option, value] of Object.entries(options)) {

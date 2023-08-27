@@ -45,7 +45,7 @@ suite('option parity tests', function () {
     ];
 
     const testBatsCommand = (tests: string, options?: BatsOptions) => function () {
-        let command = `npx bats ${tests}`;
+        let command = `bats ${tests}`;
 
         // parse options into command
         if (options) {
