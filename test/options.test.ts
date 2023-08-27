@@ -2,8 +2,6 @@ import { assert } from 'chai';
 
 import * as cp from 'child_process';
 
-import decamelize from 'decamelize';
-
 import { bats, BatsOptions } from '../src/index.js';
 import { formatOption } from '../src/formatting.js';
 import { NotImplementedError } from '../src/errors.js';
