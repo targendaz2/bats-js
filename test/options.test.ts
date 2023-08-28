@@ -163,6 +163,14 @@ suite('options formatting tests', function () {
 
     optionsToTest.forEach(optionsToTest => {
         const [options, _] = optionsToTest;
-        test(`format "${options}"`, testBatsOptionsParsing(optionsToTest));
+        let testName = 'format { ';
+        
+        for(const [option, value] of Object.entries(options)) {
+            testName += `${option}: ${value}, `;
+        }
+
+        testName = testName.slice(0, -2) + ' }';
+
+        test(testName, testBatsOptionsParsing(optionsToTest));
     });
 });
