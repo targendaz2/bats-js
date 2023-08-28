@@ -2,9 +2,8 @@ import { assert } from 'chai';
 
 import * as cp from 'child_process';
 
-import { bats, BatsOptions } from '../src/index.js';
-import { formatOption, formatOptions } from '../src/formatting.js';
-import { NotImplementedError } from '../src/errors.js';
+import { BatsOptions, formatOption, formatOptions, NotImplementedError } from '../src/options.js';
+import { bats } from '../src/index.js';
 
 suite('option parity tests', function () {
     const batsCommands: [string, BatsOptions?][] = [
