@@ -1,5 +1,7 @@
 import decamelize from 'decamelize';
 
+import { BatsOptions } from './index.js';
+
 /**
  * Formats an option and value as a string
  * @param option the option to format
@@ -24,4 +26,21 @@ export function formatOption(option: string, value: any): string | null {
             break;
     }
     return formattedOption;
+}
+
+export function formatOptions(options: BatsOptions): string | null {
+    let formattedOptions = '';
+
+    if (!options) {
+        return null;
+    }
+
+    for (const [option, value] of Object.entries(options)) {
+        const formattedOption = formatOption(option, value);
+        if (formattedOption) {
+            formattedOptions += ' ' + formattedOption;
+        }
+    }
+
+    return formattedOptions.trim() || null;
 }

@@ -3,7 +3,7 @@ import { assert } from 'chai';
 import * as cp from 'child_process';
 
 import { bats, BatsOptions } from '../src/index.js';
-import { formatOption } from '../src/formatting.js';
+import { formatOption, formatOptions } from '../src/formatting.js';
 import { NotImplementedError } from '../src/errors.js';
 
 suite('option parity tests', function () {
@@ -138,5 +138,31 @@ suite('option formatting tests', function () {
     optionsToTest.forEach(optionToTest => {
         const [option, value, _] = optionToTest;
         test(`format "${option}: ${value}"`, testBatsOptionParsing(optionToTest));
+    });
+});
+
+suite('options formatting tests', function () {
+    type OptionsToTest = [BatsOptions, string | null];
+    const optionsToTest: OptionsToTest[] = [
+        [{ count: true, noTempdirCleanup: true, recursive: true }, '--count --no-tempdir-cleanup --recursive'],
+        [{ count: true, filter: /addition/, noTempdirCleanup: true, recursive: true }, '--count --filter addition --no-tempdir-cleanup --recursive'],
+        [{ count: true, filterTags: ['tag1', 'tag2', 'tag3'], recursive: true }, '--count --filter-tags tag1,tag2,tag3 --recursive'],
+        [{ count: false, noTempdirCleanup: false, recursive: true }, '--recursive'],
+        [{ count: false, noTempdirCleanup: false, recursive: false }, null],
+    ];
+
+    const testBatsOptionsParsing = (optionsToTest: OptionsToTest) => function () {
+        const [options, expectedOutput] = optionsToTest;
+        const actualOutput = formatOptions(options);
+
+        assert.equal(
+            actualOutput,
+            expectedOutput,
+        );
+    };
+
+    optionsToTest.forEach(optionsToTest => {
+        const [options, _] = optionsToTest;
+        test(`format "${options}"`, testBatsOptionsParsing(optionsToTest));
     });
 });
