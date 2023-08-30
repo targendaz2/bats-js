@@ -8,6 +8,7 @@
   "type": "module",
   "scripts": {
     "compile": "tsc -p ./",
+    "coverage": "nyc npm test",
     "lint": "eslint src --ext ts",
     "pretest": "npm run compile && npm run lint",
     "test": "mocha ./out/test",
@@ -24,6 +25,7 @@
   },
   "homepage": "https://github.com/targendaz2/bats-js#readme",
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@tsconfig/node-lts": "^18.12.3",
     "@types/chai": "^4.3.5",
     "@types/mocha": "^10.0.1",
@@ -33,6 +35,8 @@
     "chai": "^4.3.7",
     "eslint": "^8.47.0",
     "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
+    "source-map-support": "^0.5.21",
     "typescript": "^5.1.6"
   },
   "peerDependencies": {
