@@ -1,6 +1,7 @@
 import decamelize from 'decamelize';
 
-export interface BatsOptions {
+/** Collection of Bats CLI options */
+export type BatsOptions = {
     /** Count test cases without running any tests */
     count?: boolean;
     /** 
@@ -97,7 +98,7 @@ export interface BatsOptions {
      * Display the version number
      */
     version?: never;
-}
+};
 
 export const notImplementedOptions = [
     'gatherTestOutputsIn',
@@ -134,6 +135,11 @@ export function formatOption(option: string, value: any): string | null {
     return formattedOption;
 }
 
+/**
+ * Formats a BatsOptions object as a string
+ * @param options the BatsOptions object to format
+ * @returns the formatted options or null
+ */
 export function formatOptions(options: BatsOptions): string | null {
     let formattedOptions = '';
 
@@ -151,6 +157,7 @@ export function formatOptions(options: BatsOptions): string | null {
     return formattedOptions.trim() || null;
 }
 
+/** Error thrown for existing Bats CLI options that are not implemented in this SDK */
 export class NotImplementedError extends Error {
     constructor(message?: string) {
         super(message);
