@@ -3,6 +3,9 @@ import * as fs from 'fs';
 import { BatsOptions, DoesNotExistError, NotImplementedError } from './options.js';
 
 export class BatsCommand {
+    tests: string;
+    options?: BatsOptions;
+
     private _implementedOptions: {[key: string]: boolean} = {
         count: true,
         codeQuoteStyle: true,
@@ -52,17 +55,22 @@ export class BatsCommand {
     }
 
     constructor(tests: string, options?: BatsOptions) {
-        // Check if the tests path is valid on instantiation
+        this.tests = tests;
+        this.options = options;
+    }
+
+    validate() {
+        // Check if the tests path is valid
         // We could delegate this to the binary and may do so in the future
-        if (!this._testsPathIsValid(tests)) {
-            throw new Error();
+        if (!this._testsPathIsValid(this.tests)) {
+            throw new InvalidCommand();
         }
 
         // If options are specified, check if they're implemented
         // We check for nonexistent options here to protect against new, future options that have yet to be implemented.
         // We check for not implemented options so we can acknowledge they exist
-        if (options) {
-            for (const [option, _] of Object.entries(options)) {
+        if (this.options) {
+            for (const [option, _] of Object.entries(this.options)) {
                 if (!this._optionExists(option)) {
                     throw new DoesNotExistError();
                 } else if (!this._optionIsImplemented(option)) {
@@ -70,5 +78,12 @@ export class BatsCommand {
                 }
             }
         }
+    }
+}
+
+/** Error thrown for commands that fail validation */
+export class InvalidCommand extends Error {
+    constructor(message?: string) {
+        super(message);
     }
 }
