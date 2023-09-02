@@ -2,6 +2,7 @@ import * as fs from 'fs';
 
 import { BatsOptions, DoesNotExistError, NotImplementedError } from './options.js';
 
+/** Object representation of a Bats command */
 export class BatsCommand {
     tests: string;
     options?: BatsOptions;
@@ -34,10 +35,19 @@ export class BatsCommand {
         version: false,
     };
 
-    private _testsPathIsValid(tests: string): boolean {
-        // Check if the tests path is valid on instantiation
+    private _testsPathIsValid(): boolean {
+        // Check if the tests path is valid
         // We could delegate this to the binary and may do so in the future
-        if (tests && fs.existsSync(tests)) {
+        if (this.tests) {
+            return true;
+        }
+        return false;
+    }
+
+    private _testsPathExists(): boolean {
+        // Check if the tests path exists
+        // We could delegate this to the binary and may do so in the future
+        if (fs.existsSync(this.tests)) {
             return true;
         }
         return false;
@@ -62,8 +72,8 @@ export class BatsCommand {
     validate() {
         // Check if the tests path is valid
         // We could delegate this to the binary and may do so in the future
-        if (!this._testsPathIsValid(this.tests)) {
-            throw new InvalidCommand();
+        if (!this._testsPathIsValid() || !this._testsPathExists()) {
+            throw new InvalidCommandError();
         }
 
         // If options are specified, check if they're implemented
@@ -79,10 +89,19 @@ export class BatsCommand {
             }
         }
     }
+
+    /** Formats the command as a callable string */
+    toString(): string {
+        if (!this._testsPathIsValid()) {
+            throw new InvalidCommandError();
+        }
+        
+        return `bats "${this.tests}"`;
+    }
 }
 
 /** Error thrown for commands that fail validation */
-export class InvalidCommand extends Error {
+export class InvalidCommandError extends Error {
     constructor(message?: string) {
         super(message);
     }

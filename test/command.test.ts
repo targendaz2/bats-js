@@ -2,7 +2,7 @@ import { assert } from 'chai';
 
 import * as fs from 'fs';
 
-import { BatsCommand, InvalidCommand } from '../src/command.js';
+import { BatsCommand, InvalidCommandError } from '../src/command.js';
 import { DoesNotExistError, NotImplementedError } from '../src/options.js';
 
 suite('command validation tests', function () {
@@ -17,7 +17,7 @@ suite('command validation tests', function () {
             // When that command is validated
 
             // Then it should throw an error
-            assert.throws(() => command.validate(), InvalidCommand);
+            assert.throws(() => command.validate(), InvalidCommandError);
         });
 
         test('command has empty tests path', function () {
@@ -27,7 +27,7 @@ suite('command validation tests', function () {
             // When that command is validated
 
             // The it should throw an error
-            assert.throws(() => command.validate(), InvalidCommand);
+            assert.throws(() => command.validate(), InvalidCommandError);
         });
 
         test('command has nonexistent tests path', function () {
@@ -40,7 +40,7 @@ suite('command validation tests', function () {
             // When that command is validated
 
             // Then it should throw an error
-            assert.throws(() => command.validate(), InvalidCommand);
+            assert.throws(() => command.validate(), InvalidCommandError);
         });
 
         test('command has existing tests path', function () {
@@ -51,7 +51,7 @@ suite('command validation tests', function () {
             // When that command is validated
 
             // It should not throw an error
-            assert.doesNotThrow(() => command.validate(), InvalidCommand);
+            assert.doesNotThrow(() => command.validate(), InvalidCommandError);
         });
     });
 
@@ -63,7 +63,7 @@ suite('command validation tests', function () {
             // When that command is validated
 
             // Then it should not throw an error
-            assert.doesNotThrow(() => command.validate(), InvalidCommand);
+            assert.doesNotThrow(() => command.validate(), InvalidCommandError);
         });
 
         test('command has empty options', function () {
@@ -73,7 +73,7 @@ suite('command validation tests', function () {
             // When that command is validated
 
             // Then it should not throw an error
-            assert.doesNotThrow(() => command.validate(), InvalidCommand);
+            assert.doesNotThrow(() => command.validate(), InvalidCommandError);
         });
 
         test('command has unknown options', function () {
@@ -105,17 +105,70 @@ suite('command validation tests', function () {
             // When that command is validated
 
             // Then it should not throw an error
-            assert.doesNotThrow(() => command.validate(), InvalidCommand);
+            assert.doesNotThrow(() => command.validate(), InvalidCommandError);
         });
     });
 });
 
-// suite('command formatting tests', function () {
-//     suite('tests path formatting tests', function () {
-//         const testPaths: (string | null)[] = [
-//             './fixtures/bats_files',
-//             './fixtures/bats_files/addition.bats',
-//             './fixtures/bats_files/'
-//         ];
-//     });
-// });
+suite('command formatting tests', function () {
+    suite('valid tests path formatting tests', function () {
+        const testPaths: string[] = [
+            './fixtures/bats_files',
+            './fixtures/bats_files/',
+            './fixtures/bats_files/addition.bats',
+            './fixtures/bats_files/other tests.bats',
+            './fixtures/bats files/addition.bats',
+            'fixtures/bats_files',
+            'fixtures/bats_files/',
+            'fixtures/bats_files/addition.bats',
+            'fixtures/bats_files/other tests.bats',
+            'fixtures/bats files/addition.bats',
+            '/fixtures/bats_files',
+            '/fixtures/bats_files/',
+            '/fixtures/bats_files/addition.bats',
+            '/fixtures/bats_files/other tests.bats',
+            '/fixtures/bats files/addition.bats',
+        ];
+
+        const testPathFormatting = (tests: string) => function () {
+            // Given a command with a not empty tests path
+            const command = new BatsCommand(tests);
+
+            // When the command is formatted as a string
+
+            // Then it should match the expected output
+            const expectedOutput = `bats "${tests}"`;
+            assert.equal(command.toString(), expectedOutput);
+        };
+
+        testPaths.forEach((tests) => {
+            const testName = `format path "${tests}"`;
+            test(testName, testPathFormatting(tests));
+        });
+    });
+
+    suite('invalid tests path formatting tests', function () {
+        const testPaths: (string | null)[] = [
+            null,
+            '',
+        ];
+
+        const testPathFormatting = (tests: string | null) => function () {
+            // Given a command with an invalid tests path
+            // @ts-ignore
+            const command = new BatsCommand(tests);
+            assert.throws(() => command.validate(), InvalidCommandError);
+
+            // When the command is formatted as a string
+
+            // Then it should throw an error
+            const expectedOutput = `bats "${tests}"`;
+            assert.throws(() => command.toString(), InvalidCommandError);
+        };
+
+        testPaths.forEach((tests) => {
+            const testName = `format path "${tests}"`;
+            test(testName, testPathFormatting(tests));
+        });
+    });
+});
