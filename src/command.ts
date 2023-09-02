@@ -38,16 +38,7 @@ export class BatsCommand {
     private _testsPathIsValid(): boolean {
         // Check if the tests path is valid
         // We could delegate this to the binary and may do so in the future
-        if (this.tests) {
-            return true;
-        }
-        return false;
-    }
-
-    private _testsPathExists(): boolean {
-        // Check if the tests path exists
-        // We could delegate this to the binary and may do so in the future
-        if (fs.existsSync(this.tests)) {
+        if (this.tests && fs.existsSync(this.tests)) {
             return true;
         }
         return false;
@@ -69,10 +60,11 @@ export class BatsCommand {
         this.options = options;
     }
 
+    /** Validate the tests path and options */
     validate() {
         // Check if the tests path is valid
         // We could delegate this to the binary and may do so in the future
-        if (!this._testsPathIsValid() || !this._testsPathExists()) {
+        if (!this._testsPathIsValid()) {
             throw new InvalidCommandError();
         }
 
@@ -92,11 +84,12 @@ export class BatsCommand {
 
     /** Formats the command as a callable string */
     toString(): string {
-        if (!this._testsPathIsValid()) {
-            throw new InvalidCommandError();
+        let command = 'bats';
+        if (this.tests) {
+            command += ` "${this.tests}"`;
         }
-        
-        return `bats "${this.tests}"`;
+
+        return command;
     }
 }
 

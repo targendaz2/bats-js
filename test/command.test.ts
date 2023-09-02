@@ -161,9 +161,9 @@ suite('command formatting tests', function () {
 
             // When the command is formatted as a string
 
-            // Then it should throw an error
-            const expectedOutput = `bats "${tests}"`;
-            assert.throws(() => command.toString(), InvalidCommandError);
+            // Then it should match the expected output
+            const expectedOutput = 'bats';
+            assert.equal(command.toString(), expectedOutput);
         };
 
         testPaths.forEach((tests) => {
