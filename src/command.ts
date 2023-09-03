@@ -51,6 +51,7 @@ export class BatsCommand {
         return false;
     }
 
+    /** Checks if an option is implemented */
     private _optionIsImplemented(option: string): boolean {
         return this._implementedOptions[option];
     }
