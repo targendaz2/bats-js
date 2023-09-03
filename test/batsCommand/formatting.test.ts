@@ -1,6 +1,7 @@
 import { assert } from 'chai';
 
 import { BatsCommand, InvalidCommandError } from '../../src/command.js';
+import { BatsOptions, formatOption, formatOptions } from '../../src/options.js';
 
 suite('command formatting tests', function () {
     suite('valid tests path formatting tests', function () {
@@ -62,5 +63,67 @@ suite('command formatting tests', function () {
             const testName = `format path "${tests}"`;
             test(testName, testPathFormatting(tests));
         });
+    });
+});
+
+suite('option formatting tests', function () {
+    type OptionToTest = [string, any, string | null];
+    const optionsToTest: OptionToTest[] = [
+        ['count', true, '--count'],
+        ['count', false, null],
+        ['lineReferenceFormat', 'colon', '--line-reference-format colon'],
+        ['filter', /subtraction/, '--filter subtraction'],
+        ['filterTags', ['tag1', 'tag2', 'tag3'], '--filter-tags tag1,tag2,tag3'],
+        ['noTempdirCleanup', true, '--no-tempdir-cleanup'],
+        ['noTempdirCleanup', false, null],
+    ];
+
+    const testBatsOptionParsing = (optionToTest: OptionToTest) => function () {
+        const [option, value, expectedOutput] = optionToTest;
+        const actualOutput = formatOption(option, value);
+
+        assert.equal(
+            actualOutput,
+            expectedOutput,
+        );
+    };
+
+    optionsToTest.forEach(optionToTest => {
+        const [option, value, _] = optionToTest;
+        test(`format "${option}: ${value}"`, testBatsOptionParsing(optionToTest));
+    });
+});
+
+suite('options formatting tests', function () {
+    type OptionsToTest = [BatsOptions, string | null];
+    const optionsToTest: OptionsToTest[] = [
+        [{ count: true, noTempdirCleanup: true, recursive: true }, '--count --no-tempdir-cleanup --recursive'],
+        [{ count: true, filter: /addition/, noTempdirCleanup: true, recursive: true }, '--count --filter addition --no-tempdir-cleanup --recursive'],
+        [{ count: true, filterTags: ['tag1', 'tag2', 'tag3'], recursive: true }, '--count --filter-tags tag1,tag2,tag3 --recursive'],
+        [{ count: false, noTempdirCleanup: false, recursive: true }, '--recursive'],
+        [{ count: false, noTempdirCleanup: false, recursive: false }, null],
+    ];
+
+    const testBatsOptionsParsing = (optionsToTest: OptionsToTest) => function () {
+        const [options, expectedOutput] = optionsToTest;
+        const actualOutput = formatOptions(options);
+
+        assert.equal(
+            actualOutput,
+            expectedOutput,
+        );
+    };
+
+    optionsToTest.forEach(optionsToTest => {
+        const [options, _] = optionsToTest;
+        let testName = 'format { ';
+
+        for (const [option, value] of Object.entries(options)) {
+            testName += `${option}: ${value}, `;
+        }
+
+        testName = testName.slice(0, -2) + ' }';
+
+        test(testName, testBatsOptionsParsing(optionsToTest));
     });
 });
