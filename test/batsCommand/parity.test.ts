@@ -2,8 +2,9 @@ import { assert } from 'chai';
 
 import * as cp from 'child_process';
 
-import { BatsOptions, formatOption } from '../../src/options.js';
 import { bats } from '../../src/index.js';
+import { BatsOptions } from '../../src/options.js';
+import { Formatting } from '../../src/formatting.js';
 
 suite('option parity tests', function () {
     const tests = './fixtures/bats_files';
@@ -13,7 +14,7 @@ suite('option parity tests', function () {
 
         // parse options into command
         for (const [option, value] of Object.entries(options)) {
-            const formattedOption = formatOption(option, value);
+            const formattedOption = Formatting.singleOption(option, value);
             if (formattedOption) {
                 command += ' ' + formattedOption;
             }
@@ -66,7 +67,7 @@ suite('option parity tests', function () {
 
             // parse options into command
             for (const [option, value] of Object.entries(options)) {
-                const formattedOption = formatOption(option, value);
+                const formattedOption = Formatting.singleOption(option, value);
                 if (formattedOption) {
                     command += formattedOption + ' ';
                 }
@@ -93,7 +94,7 @@ suite('option parity tests', function () {
 
             // parse options into command
             for (const [option, value] of Object.entries(options)) {
-                const formattedOption = formatOption(option, value);
+                const formattedOption = Formatting.singleOption(option, value);
                 if (formattedOption) {
                     command += formattedOption + ' ';
                 }

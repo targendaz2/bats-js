@@ -1,7 +1,8 @@
 import { assert } from 'chai';
 
 import { BatsCommand, InvalidCommandError } from '../../src/command.js';
-import { BatsOptions, formatOption, formatOptions } from '../../src/options.js';
+import { BatsOptions } from '../../src/options.js';
+import { Formatting } from '../../src/formatting.js';
 
 suite('tests path formatting tests', function () {
     suite('valid tests path formatting tests', function () {
@@ -81,7 +82,7 @@ suite('options formatting tests', function () {
 
         const testBatsOptionParsing = (optionToTest: OptionToTest) => function () {
             const [option, value, expectedOutput] = optionToTest;
-            const actualOutput = formatOption(option, value);
+            const actualOutput = Formatting.singleOption(option, value);
 
             assert.equal(
                 actualOutput,
@@ -107,7 +108,7 @@ suite('options formatting tests', function () {
 
         const testBatsOptionsParsing = (optionsToTest: OptionsToTest) => function () {
             const [options, expectedOutput] = optionsToTest;
-            const actualOutput = formatOptions(options);
+            const actualOutput = Formatting.batsOptions(options);
 
             assert.equal(
                 actualOutput,
