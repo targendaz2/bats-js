@@ -1,4 +1,4 @@
-import decamelize from 'decamelize';
+import _ from 'lodash';
 
 /** Collection of Bats CLI options */
 export interface BatsOptions {
@@ -140,7 +140,7 @@ export const notImplementedOptions = [
  * @returns the formatted option and value, or null
  */
 export function formatOption(option: string, value: any): string | null {
-    let formattedOption = '--' + decamelize(option, { separator: '-' });
+    let formattedOption = '--' + _.kebabCase(option);
 
     switch (typeof value) {
         case 'boolean':
