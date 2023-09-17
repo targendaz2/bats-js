@@ -25,7 +25,9 @@
 				"DavidAnson.vscode-markdownlint",
 				"dbaeumer.vscode-eslint",
 				"eamodio.gitlens",
+				"github.vscode-github-actions",
 				"jetmartin.bats",
+				"maty.vscode-mocha-sidebar",
 				"ms-azuretools.vscode-docker",
 				"streetsidesoftware.code-spell-checker",
 				"timonwong.shellcheck"

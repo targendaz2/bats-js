@@ -2,6 +2,8 @@
     "recommendations": [
         "jetmartin.bats",
         "timonwong.shellcheck",
-        "dbaeumer.vscode-eslint"
+        "dbaeumer.vscode-eslint",
+        "github.vscode-github-actions",
+        "maty.vscode-mocha-sidebar"
     ]
 }
