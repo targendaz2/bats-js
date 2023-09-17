@@ -3,7 +3,7 @@ import { assert } from 'chai';
 import * as fs from 'fs';
 
 import { BatsCommand, InvalidCommandError } from '../../src/command.js';
-import { DoesNotExistError, NotImplementedError } from '../../src/options.js';
+import { UnknownOptionError, NotImplementedError } from '../../src/options.js';
 
 suite('command validation tests', function () {
     const testsPath = './fixtures/bats_files';
@@ -84,7 +84,7 @@ suite('command validation tests', function () {
             // When that command is validated
 
             // Then it should throw an error
-            assert.throws(() => command.validate(), DoesNotExistError);
+            assert.throws(() => command.validate(), UnknownOptionError);
         });
 
         test('command has not implemented options', function () {

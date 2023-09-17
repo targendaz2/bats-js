@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 
-import { BatsOptions, DoesNotExistError, NotImplementedError } from './options.js';
+import { IBatsOptions, NotImplementedError, UnknownOptionError } from './options.js';
 import { Format } from './formatting.js';
 
 /** Object representation of a Bats command */
 export class BatsCommand {
     testsPath: string;
-    options?: BatsOptions;
+    options?: IBatsOptions;
 
     private _implementedOptions: {[key: string]: boolean} = {
         count: true,
@@ -57,7 +57,7 @@ export class BatsCommand {
         return this._implementedOptions[option];
     }
 
-    constructor(testsPath: string, options?: BatsOptions) {
+    constructor(testsPath: string, options?: IBatsOptions) {
         this.testsPath = testsPath;
         this.options = options;
     }
@@ -76,7 +76,7 @@ export class BatsCommand {
         if (this.options) {
             for (const [option] of Object.entries(this.options)) {
                 if (!this._optionExists(option)) {
-                    throw new DoesNotExistError();
+                    throw new UnknownOptionError();
                 } else if (!this._optionIsImplemented(option)) {
                     throw new NotImplementedError();
                 }

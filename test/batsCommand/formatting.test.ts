@@ -1,8 +1,8 @@
 import { assert } from 'chai';
 
 import { BatsCommand, InvalidCommandError } from '../../src/command.js';
-import { BatsOptions } from '../../src/options.js';
 import { Format } from '../../src/formatting.js';
+import { IBatsOptions } from '../../src/options.js';
 
 suite('Bats tests path formatting tests', function () {
     suite('valid tests paths', function () {
@@ -97,7 +97,7 @@ suite('Bats options formatting tests', function () {
     });
 
     suite('multiple options formatting', function () {
-        type OptionsToTest = [BatsOptions, string | null];
+        type OptionsToTest = [IBatsOptions, string | null];
         const optionsToTest: OptionsToTest[] = [
             [{ count: true, noTempdirCleanup: true, recursive: true }, '--count --no-tempdir-cleanup --recursive'],
             [{ count: true, filter: /addition/, noTempdirCleanup: true, recursive: true }, '--count --filter addition --no-tempdir-cleanup --recursive'],
@@ -134,7 +134,7 @@ suite('Bats options formatting tests', function () {
 
 suite('Bats command formatting tests', function () {
     suite('valid command formatting', function () {
-        type CommandToTest = [string, BatsOptions, string | null];
+        type CommandToTest = [string, IBatsOptions, string | null];
         const commandsToTest: CommandToTest[] = [
             ['./fixtures/bats_files', {}, null],
             ['fixtures/bats_files', { recursive: true }, '--recursive'],
@@ -176,7 +176,7 @@ suite('Bats command formatting tests', function () {
     });
 
     suite('invalid command formatting', function () {
-        type CommandToTest = [string | null, BatsOptions, string | null];
+        type CommandToTest = [string | null, IBatsOptions, string | null];
         const commandsToTest: CommandToTest[] = [
             [null, {}, null],
             ['', { recursive: true }, '--recursive'],

@@ -1,6 +1,6 @@
 import * as cp from 'child_process';
 
-import { BatsOptions, NotImplementedError, notImplementedOptions } from './options.js';
+import { IBatsOptions, NotImplementedError, notImplementedOptions } from './options.js';
 import { Format } from './formatting.js';
 
 class BatsResult {
@@ -13,7 +13,7 @@ class BatsResult {
     }
 }
 
-export function bats(tests: string = '.', options?: BatsOptions): BatsResult {
+export function bats(tests: string = '.', options?: IBatsOptions): BatsResult {
     let command = `bats ${tests}`;
 
     if (options) {

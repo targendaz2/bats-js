@@ -10,7 +10,7 @@
     "docs": "typedoc src/index.ts",
     "lint": "eslint src --ext ts",
     "pretest": "npm run compile && npm run lint",
-    "test": "mocha ./out/**/*.test.js",
+    "test": "mocha",
     "watch": "tsc -watch -p ./"
   },
   "repository": {

@@ -3,7 +3,7 @@
 // import { Formatting } from './formatting.js';
 
 /** Collection of Bats CLI options */
-export interface BatsOptions {
+export interface IBatsOptions {
     /** Count test cases without running any tests */
     count?: boolean;
 
@@ -46,21 +46,6 @@ export interface BatsOptions {
     /** Switch between formatters: pretty (default), tap (default w/o term), tap13, junit */
     formatter?: 'pretty' | 'tap' | 'tap13' | 'junit';
 
-    /** 
-     * NOT IMPLEMENTED
-     * 
-     * Gather the output of failing *and* passing tests
-     * as files in directory (if existing, must be empty) 
-     * */
-    gatherTestOutputsIn?: never;
-
-    /** 
-     * NOT IMPLEMENTED
-     * 
-     * Display the help message
-     * */
-    help?: never;
-
     /** Number of parallel jobs (requires GNU parallel or shenwei356/rush) */
     jobs?: number;
 
@@ -76,13 +61,6 @@ export interface BatsOptions {
     /** Serialize test execution within files instead of running them in parallel (requires jobs >1) */
     noParallelizeWithinFiles?: boolean;
 
-    /** 
-     * NOT IMPLEMENTED
-     * 
-     * Directory to write report files (must exist)
-     */
-    output?: never;
-
     /** Shorthand for "formatter pretty" */
     pretty?: boolean;
 
@@ -92,57 +70,37 @@ export interface BatsOptions {
     /** Include tests in subdirectories */
     recursive?: boolean;
 
-    /** 
-     * NOT IMPLEMENTED
-     * 
-     * Switch between reporters (same options as formatter)
-     * */
-    reportFormatter?: never;
-
     /** Print output of passing tests */
     showOutputOfPassingTests?: boolean;
 
     /** Shorthand for "formatter tap" */
     tap?: boolean;
 
-    /**
-     * NOT IMPLEMENTED
-     * 
-     * Add timing information to tests
-     */
-    timing?: never;
-
     /** Print test commands as they are executed (like `set -x`) */
     trace?: boolean;
 
     /** Make `run` print `$output` by default */
     verboseRun?: boolean;
-
-    /**
-     * NOT IMPLEMENTED
-     * 
-     * Display the version number
-     */
-    version?: never;
 }
 
-export const notImplementedOptions = [
-    'gatherTestOutputsIn',
-    'help',
-    'reportFormatter',
-    'output',
-    'timing',
-    'version',
-];
+/** Represents a collection of Bats CLI options */
+export class BatsOptions {    
+    options: IBatsOptions;
 
-/** Error thrown for nonexistent Bats CLI options */
-export class DoesNotExistError extends Error {
+    constructor(options: IBatsOptions) {
+        this.options = options;
+    }
+}
+
+export const notImplementedOptions = ['help'];
+
+/** Error thrown for unknown Bats CLI options */
+export class UnknownOptionError extends Error {
     constructor(message?: string) {
         super(message);
     }
 }
 
-/** Error thrown for existing Bats CLI options that are not implemented in this SDK */
 export class NotImplementedError extends Error {
     constructor(message?: string) {
         super(message);

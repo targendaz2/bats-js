@@ -3,13 +3,13 @@ import { assert } from 'chai';
 import * as cp from 'child_process';
 
 import { bats } from '../../src/main.js';
-import { BatsOptions } from '../../src/options.js';
 import { Format } from '../../src/formatting.js';
+import { IBatsOptions } from '../../src/options.js';
 
 suite('option parity tests', function () {
     const tests = './fixtures/bats_files';
 
-    const testOptions = (options: BatsOptions) => function () {
+    const testOptions = (options: IBatsOptions) => function () {
         let command = `bats ${tests}`;
 
         // parse options into command
@@ -32,7 +32,7 @@ suite('option parity tests', function () {
     };
 
     suite('single option parity tests', function () {
-        const optionsToTest: BatsOptions[] = [
+        const optionsToTest: IBatsOptions[] = [
             { count: true },
             { codeQuoteStyle: '""' },
             { codeQuoteStyle: '--' },
@@ -78,7 +78,7 @@ suite('option parity tests', function () {
     });
 
     suite('multiple options parity tests', function () {
-        const optionsToTest: BatsOptions[] = [
+        const optionsToTest: IBatsOptions[] = [
             { jobs: 2, parallelBinaryName: 'parallel' },
             { jobs: 3, parallelBinaryName: 'parallel', noParallelizeAcrossFiles: true },
             { jobs: 3, parallelBinaryName: 'parallel', noParallelizeWithinFiles: true },

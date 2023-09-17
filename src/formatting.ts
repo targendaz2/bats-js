@@ -1,12 +1,13 @@
 import _ from 'lodash';
 
-import { BatsOptions } from './options.js';
+import { BatsCommand } from './command.js';
+import { IBatsOptions } from './options.js';
 
 export namespace Format {
 
     /**
      * Formats a tests path as a string
-     * @param tests the path to the tests
+     * @param testsPath the path to the tests
      * @returns the formatted tests path or null
      */
     export function testsPath(testsPath: string): string | null {
@@ -48,7 +49,7 @@ export namespace Format {
      * @param options the BatsOptions object to format
      * @returns the formatted options or null
      */
-    export function options(options: BatsOptions): string | null {
+    export function options(options: IBatsOptions): string | null {
         let formattedOptions = '';
 
         if (!options) {
@@ -63,5 +64,27 @@ export namespace Format {
         }
 
         return formattedOptions.trim() || null;
+    }
+
+    /**
+     * Formats a BatsCommand object as a string
+     * @param command the BatsCommand object to format
+     * @returns the formatted command or null
+     */
+    export function command(command: BatsCommand): string | null {
+        let formattedCommand = 'bats';
+
+        if (command.testsPath) {
+            formattedCommand += ` ${testsPath(command.testsPath)}`;
+        }
+        if (command.options) {
+            formattedCommand += ` ${command.options.toString()}`;
+        }
+
+        if (formattedCommand === 'bats') {
+            return null;
+        } else {
+            return formattedCommand;
+        }
     }
 }
