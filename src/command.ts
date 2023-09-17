@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 
 import { BatsOptions, DoesNotExistError, NotImplementedError } from './options.js';
+import { Formatting } from './formatting.js';
 
 /** Object representation of a Bats command */
 export class BatsCommand {
@@ -88,6 +89,14 @@ export class BatsCommand {
         let command = 'bats';
         if (this.tests) {
             command += ` "${this.tests}"`;
+        }
+
+        let formattedOptions: string | null;
+        if (this.options) {
+            formattedOptions = Formatting.batsOptions(this.options);
+            if (formattedOptions) {
+                command += ` ${formattedOptions}`;
+            }
         }
 
         return command;

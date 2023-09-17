@@ -6,8 +6,11 @@
   "root": true,
   "rules": {
     "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/naming-convention": "warn",
     "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/semi": "warn",
     "no-fallthrough": "off",
+    "semi": "off",
     "sort-imports": [
       "warn",
       {
