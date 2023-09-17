@@ -9,7 +9,7 @@ export namespace Formatting {
      * @param value the value of that option
      * @returns the formatted option and value, or null
      */
-    export function singleOption(option: string, value: any): string | null {
+    export function singleOption(option: string, value: unknown): string | null {
         let formattedOption = '--' + _.kebabCase(option);
 
         switch (typeof value) {

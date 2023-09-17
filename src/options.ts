@@ -1,6 +1,6 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 
-import { Formatting } from './formatting.js';
+// import { Formatting } from './formatting.js';
 
 /** Collection of Bats CLI options */
 export interface BatsOptions {

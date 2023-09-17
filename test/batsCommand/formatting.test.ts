@@ -69,7 +69,7 @@ suite('tests path formatting tests', function () {
 
 suite('options formatting tests', function () {
     suite('single option formatting tests', function () {
-        type OptionToTest = [string, any, string | null];
+        type OptionToTest = [string, unknown, string | null];
         const optionsToTest: OptionToTest[] = [
             ['count', true, '--count'],
             ['count', false, null],
@@ -91,7 +91,7 @@ suite('options formatting tests', function () {
         };
 
         optionsToTest.forEach(optionToTest => {
-            const [option, value, _] = optionToTest;
+            const [option, value] = optionToTest;
             test(`format "${option}: ${value}"`, testBatsOptionParsing(optionToTest));
         });
     });
@@ -117,7 +117,7 @@ suite('options formatting tests', function () {
         };
 
         optionsToTest.forEach(optionsToTest => {
-            const [options, _] = optionsToTest;
+            const [options] = optionsToTest;
             let testName = 'format { ';
 
             for (const [option, value] of Object.entries(options)) {

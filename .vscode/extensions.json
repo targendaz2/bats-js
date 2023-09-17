@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "jetmartin.bats",
-        "timonwong.shellcheck"
+        "timonwong.shellcheck",
+        "dbaeumer.vscode-eslint"
     ]
 }

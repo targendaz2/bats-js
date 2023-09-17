@@ -73,7 +73,7 @@ export class BatsCommand {
         // We check for nonexistent options here to protect against new, future options that have yet to be implemented.
         // We check for not implemented options so we can acknowledge they exist
         if (this.options) {
-            for (const [option, _] of Object.entries(this.options)) {
+            for (const [option] of Object.entries(this.options)) {
                 if (!this._optionExists(option)) {
                     throw new DoesNotExistError();
                 } else if (!this._optionIsImplemented(option)) {

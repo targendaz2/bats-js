@@ -6,11 +6,16 @@
         "out": true
     },
     "typescript.tsc.autoDetect": "off",
-    "cSpell.words": [
-        "decamelize",
-        "tempdir"
-    ],
     "cSpell.ignoreWords": [
-        "shenwei"
+        "Anson",
+        "azuretools",
+        "dbaeumer",
+        "decamelize",
+        "eamodio",
+        "jetmartin",
+        "shellcheck",
+        "shenwei",
+        "tempdir",
+        "timonwong"
     ]
 }
