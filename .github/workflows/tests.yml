@@ -30,7 +30,7 @@ jobs:
       - run: mkdir -p mocha
 
       - name: Run tests
-        run: npm test -- --reporter json > mocha/${{ matrix.os }}.json
+        run: npm test -- --reporter json --reporter-option output=mocha/${{ matrix.os }}.json
 
       - name: Publish test results
         uses: dorny/test-reporter@v1
