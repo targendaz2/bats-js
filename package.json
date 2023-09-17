@@ -3,7 +3,7 @@
   "displayName": "Bats JS",
   "version": "0.1.0",
   "description": "",
-  "main": "./out/src/index.js",
+  "main": "./out/src/main.js",
   "type": "module",
   "scripts": {
     "compile": "tsc -p ./",

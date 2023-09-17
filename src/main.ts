@@ -1,7 +1,7 @@
 import * as cp from 'child_process';
 
 import { BatsOptions, NotImplementedError, notImplementedOptions } from './options.js';
-import { Formatting } from './formatting.js';
+import { Format } from './formatting.js';
 
 class BatsResult {
     output: string | number;
@@ -22,7 +22,7 @@ export function bats(tests: string = '.', options?: BatsOptions): BatsResult {
                 throw new NotImplementedError();
             }
 
-            const formattedOption = Formatting.singleOption(option, value);
+            const formattedOption = Format.singleOption(option, value);
             if (formattedOption) {
                 command += ' ' + formattedOption;
             }

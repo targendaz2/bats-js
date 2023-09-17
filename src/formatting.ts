@@ -2,7 +2,21 @@ import _ from 'lodash';
 
 import { BatsOptions } from './options.js';
 
-export namespace Formatting {
+export namespace Format {
+
+    /**
+     * Formats a tests path as a string
+     * @param tests the path to the tests
+     * @returns the formatted tests path or null
+     */
+    export function testsPath(testsPath: string): string | null {
+        if (!testsPath) {
+            return null;
+        }
+
+        return `"${testsPath}"`;
+    }
+
     /**
      * Formats an option and value as a string
      * @param option the option to format
@@ -34,7 +48,7 @@ export namespace Formatting {
      * @param options the BatsOptions object to format
      * @returns the formatted options or null
      */
-    export function batsOptions(options: BatsOptions): string | null {
+    export function options(options: BatsOptions): string | null {
         let formattedOptions = '';
 
         if (!options) {

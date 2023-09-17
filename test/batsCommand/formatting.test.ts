@@ -2,11 +2,11 @@ import { assert } from 'chai';
 
 import { BatsCommand, InvalidCommandError } from '../../src/command.js';
 import { BatsOptions } from '../../src/options.js';
-import { Formatting } from '../../src/formatting.js';
+import { Format } from '../../src/formatting.js';
 
-suite('Bats path formatting tests', function () {
+suite('Bats tests path formatting tests', function () {
     suite('valid tests paths', function () {
-        const testPaths: string[] = [
+        const testsPaths: string[] = [
             './fixtures/bats_files',
             './fixtures/bats_files/',
             './fixtures/bats_files/addition.bats',
@@ -24,47 +24,44 @@ suite('Bats path formatting tests', function () {
             '/fixtures/bats files/addition.bats',
         ];
 
-        const testPathFormatting = (tests: string) => function () {
-            // Given a command with a valid tests path
-            const command = new BatsCommand(tests);
+        const testsPathFormatting = (testsPath: string) => function () {
+            // Given a valid tests path
 
-            // When the command is formatted as a string
-            const actualResult = command.toString();
+            // When the tests path is formatted as a string
+            const actualResult = Format.testsPath(testsPath);
 
             // Then it should match the expected result
-            const expectedResult = `bats "${tests}"`;
+            const expectedResult = `"${testsPath}"`;
             assert.equal(actualResult, expectedResult);
         };
 
-        testPaths.forEach((tests) => {
-            const testName = `format path "${tests}"`;
-            test(testName, testPathFormatting(tests));
+        testsPaths.forEach((testsPath) => {
+            const testName = `format tests path "${testsPath}"`;
+            test(testName, testsPathFormatting(testsPath));
         });
     });
 
     suite('invalid tests paths', function () {
-        const testPaths: (string | null)[] = [
+        const testsPaths: (string | null)[] = [
             null,
             '',
         ];
 
-        const testPathFormatting = (tests: string | null) => function () {
-            // Given a command with an invalid tests path
+        const testsPathFormatting = (testsPath: string | null) => function () {
+            // Given an invalid tests path
+            assert(!testsPath);
+
+            // When the tests path is formatted as a string
             // @ts-ignore
-            const command = new BatsCommand(tests);
-            assert.throws(() => command.validate(), InvalidCommandError);
+            const actualResult = Format.testsPath(testsPath);
 
-            // When the command is formatted as a string
-            const actualResult = command.toString();
-
-            // Then it should match the expected result
-            const expectedResult = 'bats';
-            assert.equal(actualResult, expectedResult);
+            // Then it should return null
+            assert.isNull(actualResult);
         };
 
-        testPaths.forEach((tests) => {
-            const testName = `format path "${tests}"`;
-            test(testName, testPathFormatting(tests));
+        testsPaths.forEach((testsPath) => {
+            const testName = `format path "${testsPath}"`;
+            test(testName, testsPathFormatting(testsPath));
         });
     });
 });
@@ -87,7 +84,7 @@ suite('Bats options formatting tests', function () {
             const [option, value, expectedResult] = optionToTest;
 
             // When the option and value are formatted for the CLI
-            const actualResult = Formatting.singleOption(option, value);
+            const actualResult = Format.singleOption(option, value);
 
             // Then the formatted option and value should match the expected result
             assert.equal(actualResult, expectedResult);
@@ -114,7 +111,7 @@ suite('Bats options formatting tests', function () {
             const [options, expectedResult] = optionsToTest;
 
             // When the options object is formatted for the CLI
-            const actualResult = Formatting.batsOptions(options);
+            const actualResult = Format.options(options);
 
             // Then the formatted options should match the expected results
             assert.equal(actualResult, expectedResult);

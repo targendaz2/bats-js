@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 
 import { BatsOptions, DoesNotExistError, NotImplementedError } from './options.js';
-import { Formatting } from './formatting.js';
+import { Format } from './formatting.js';
 
 /** Object representation of a Bats command */
 export class BatsCommand {
-    tests: string;
+    testsPath: string;
     options?: BatsOptions;
 
     private _implementedOptions: {[key: string]: boolean} = {
@@ -39,7 +39,7 @@ export class BatsCommand {
     private _testsPathIsValid(): boolean {
         // Check if the tests path is valid
         // We could delegate this to the binary and may do so in the future
-        if (this.tests && fs.existsSync(this.tests)) {
+        if (this.testsPath && fs.existsSync(this.testsPath)) {
             return true;
         }
         return false;
@@ -57,8 +57,8 @@ export class BatsCommand {
         return this._implementedOptions[option];
     }
 
-    constructor(tests: string, options?: BatsOptions) {
-        this.tests = tests;
+    constructor(testsPath: string, options?: BatsOptions) {
+        this.testsPath = testsPath;
         this.options = options;
     }
 
@@ -87,13 +87,20 @@ export class BatsCommand {
     /** Formats the command as a callable string */
     toString(): string {
         let command = 'bats';
-        if (this.tests) {
-            command += ` "${this.tests}"`;
+
+        let formattedTestsPath: string | null;
+        if (this.testsPath) {
+            formattedTestsPath = Format.testsPath(this.testsPath);
+
+            if (formattedTestsPath) {
+                command += ` ${formattedTestsPath}`;
+            }
         }
 
         let formattedOptions: string | null;
         if (this.options) {
-            formattedOptions = Formatting.batsOptions(this.options);
+            formattedOptions = Format.options(this.options);
+
             if (formattedOptions) {
                 command += ` ${formattedOptions}`;
             }
