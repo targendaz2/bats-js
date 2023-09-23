@@ -1,4 +1,4 @@
-// import _ from 'lodash';
+import _ from 'lodash';
 
 // import { Formatting } from './formatting.js';
 
@@ -83,9 +83,55 @@ export interface IBatsOptions {
     verboseRun?: boolean;
 }
 
+export class BatsOption {
+    private _key: string;
+    private _value: unknown;
+
+    toString() {
+        let option = '--' + _.kebabCase(this._key);
+
+        switch (typeof this._value) {
+            case 'boolean':
+                if (this._value === false) {
+                    return null;
+                }
+                break;
+            case 'object':
+                if (this._value instanceof RegExp) {
+                    option += ` ${this._value.source}`;
+                    break;
+                }
+            default:
+                option += ` ${this._value}`;
+                break;
+        }
+
+        return option;
+    }
+
+    constructor(key: string, value: unknown) {
+        this._key = key;
+        this._value = value;
+    }
+}
+
 /** Represents a collection of Bats CLI options */
 export class BatsOptions {    
     options: IBatsOptions;
+
+    toString() {
+        let options = '';
+
+        for (const [option, value] of Object.entries(this.options)) {
+            const batsOption = new BatsOption(option, value);
+            const formattedOption = batsOption.toString();
+            if (formattedOption) {
+                options += formattedOption + ' ';
+            }
+        }
+
+        return options.trim() || null;
+    }
 
     constructor(options: IBatsOptions) {
         this.options = options;
