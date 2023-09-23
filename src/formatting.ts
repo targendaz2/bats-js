@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import kebabCase from 'lodash.kebabcase';
 
 import { BatsCommand } from './command.js';
 import { IBatsOptions } from './options.js';
@@ -25,7 +25,7 @@ export namespace Format {
      * @returns the formatted option and value, or null
      */
     export function singleOption(option: string, value: unknown): string | null {
-        let formattedOption = '--' + _.kebabCase(option);
+        let formattedOption = '--' + kebabCase(option);
 
         switch (typeof value) {
             case 'boolean':

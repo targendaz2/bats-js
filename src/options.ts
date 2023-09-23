@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import kebabCase from 'lodash.kebabcase';
 
 // import { Formatting } from './formatting.js';
 
@@ -88,7 +88,7 @@ export class BatsOption {
     private _value: unknown;
 
     toString() {
-        let option = '--' + _.kebabCase(this._key);
+        let option = '--' + kebabCase(this._key);
 
         switch (typeof this._value) {
             case 'boolean':
