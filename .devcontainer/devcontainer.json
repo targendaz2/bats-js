@@ -18,15 +18,16 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "DavidAnson.vscode-markdownlint",
-                "dbaeumer.vscode-eslint",
-                "eamodio.gitlens",
-                "github.vscode-github-actions",
-                "jetmartin.bats",
-                "ms-azuretools.vscode-docker",
-                "streetsidesoftware.code-spell-checker",
-                "timonwong.shellcheck"
-            ]
+				"DavidAnson.vscode-markdownlint",
+				"dbaeumer.vscode-eslint",
+				"eamodio.gitlens",
+				"github.vscode-github-actions",
+				"jetmartin.bats",
+				"ms-azuretools.vscode-docker",
+				"streetsidesoftware.code-spell-checker",
+				"timonwong.shellcheck",
+				"wayou.vscode-todo-highlight"
+			]
         }
     }
     // Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.

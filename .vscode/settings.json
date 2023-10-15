@@ -16,6 +16,7 @@
         "kebabcase",
         "maty",
         "shellcheck",
+        "shellwords",
         "shenwei",
         "tempdir",
         "timonwong"
