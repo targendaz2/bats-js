@@ -7,7 +7,8 @@ WORKDIR /workspaces/bats-js
 
 COPY ["package.json", "package-lock.json*", "./"]
 
-RUN npm install --silent
+RUN npm install -g npm@10.2.0 && \
+    npm install --silent
 
 COPY . .
 
