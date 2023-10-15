@@ -2,9 +2,10 @@ import { expect } from 'chai';
 
 import { formatOption } from '../src/formatting';
 
-type OptionToFormat = [string, boolean | number | RegExp | string | string[], string | null];
+type OptionValue = boolean | number | RegExp | string | string[]
+type OptionToFormat = [string, OptionValue, string | null];
 
-describe('options formatting tests', function () {
+describe('single option formatting tests', function () {
     const optionsToFormat: OptionToFormat[] = [
         ['count', true, '--count'],
         ['count', false, null],
@@ -21,8 +22,8 @@ describe('options formatting tests', function () {
         ['filterStatus', 'missed', '--filter-status "missed"'],
         ['filterTags', 'tag1', '--filter-tags "tag1"'],
         ['filterTags', ['tag1'], '--filter-tags "tag1"'],
-        ['filterTags', ['tag1,tag2'], '--filter-tags "tag1,tag2"'],
-        ['filterTags', ['tag1,tag2,tag3'], '--filter-tags "tag1,tag2,tag3"'],
+        ['filterTags', ['tag1', 'tag2'], '--filter-tags "tag1,tag2"'],
+        ['filterTags', ['tag1', 'tag2', 'tag3'], '--filter-tags "tag1,tag2,tag3"'],
         ['formatter', 'pretty', '--formatter "pretty"'],
         ['formatter', 'tap', '--formatter "tap"'],
         ['formatter', 'tap13', '--formatter "tap13"'],
@@ -68,3 +69,34 @@ describe('options formatting tests', function () {
         it(testName, testOptionFormatting(optionToFormat));
     });
 });
+
+// type OptionsToFormat = [{ [key: string]: OptionValue }, string | null];
+
+// describe('multiple options formatting tests', function () {
+//     const optionsToFormat: OptionsToFormat[] = [
+//         [{count: true, recursive: true}, '--count --recursive'],
+//         [{count: false, recursive: true}, '--recursive'],
+//         [{count: false, recursive: false}, null],
+//         [{count: true, filter: /addition/, recursive: true}, '--count --filter "addition" --recursive'],
+//         [{count: false, filter: /addition/, recursive: false}, '--filter "addition"'],
+//         [{filterTags: ['tag1'], recursive: true}, '--filter-tags "tag1"'],
+//         ['filterTags', ['tag1,tag2'], '--filter-tags "tag1,tag2"'],
+//         ['filterTags', ['tag1,tag2,tag3'], '--filter-tags "tag1,tag2,tag3"'],
+//         ['noTempdirCleanup', true, '--no-tempdir-cleanup'],
+//         ['noTempdirCleanup', false, null],
+//     ];
+
+//     const testOptionFormatting = (optionToFormat: OptionToFormat) => function () {
+//         const [key, value, expectedOutput] = optionToFormat;
+//         const formattedOption = formatOption(key, value);
+
+//         expect(formattedOption).to.equal(expectedOutput);
+//     };
+
+//     optionsToFormat.forEach(optionToFormat => {
+//         const [key, value] = optionToFormat;
+//         const testName = `format { ${key}: ${value} }`;
+
+//         it(testName, testOptionFormatting(optionToFormat));
+//     });
+// });
