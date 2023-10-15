@@ -3,7 +3,6 @@
         "jetmartin.bats",
         "timonwong.shellcheck",
         "dbaeumer.vscode-eslint",
-        "github.vscode-github-actions",
-        "maty.vscode-mocha-sidebar"
+        "github.vscode-github-actions"
     ]
 }
