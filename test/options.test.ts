@@ -5,8 +5,9 @@ import { formatOption } from '../src/formatting';
 
 type ArrayOptionToFormat = [string, string[], string];
 type BooleanOptionToFormat = [string, boolean, string];
+type NumberOptionToFormat = [string, number, string];
 type StringOptionToFormat = [string, string, string];
-type OptionToFormat = ArrayOptionToFormat | BooleanOptionToFormat | StringOptionToFormat;
+type OptionToFormat = ArrayOptionToFormat | BooleanOptionToFormat | NumberOptionToFormat | StringOptionToFormat;
 
 describe('options formatting tests', function () {
     const testOptionFormatting = (optionToFormat: OptionToFormat) => function () {
@@ -88,6 +89,21 @@ describe('options formatting tests', function () {
         ];
 
         arrayOptionsToFormat.forEach(optionToFormat => {
+            const [key, value] = optionToFormat;
+            const testName = `format { ${key}: ${value} }`;
+
+            it(testName, testOptionFormatting(optionToFormat));
+        });
+    });
+
+    describe('format number options', function () {
+        const numberOptionsToFormat: NumberOptionToFormat[] = [
+            ['jobs', 1, '--jobs 1'],
+            ['jobs', 3, '--jobs 3'],
+            ['jobs', 12, '--jobs 12'],
+        ];
+
+        numberOptionsToFormat.forEach(optionToFormat => {
             const [key, value] = optionToFormat;
             const testName = `format { ${key}: ${value} }`;
 
