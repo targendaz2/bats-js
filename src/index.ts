@@ -7,15 +7,17 @@ import * as cp from 'node:child_process';
  * @param options - Bats command line options
  */
 function run(testsPath: string, options?: object) {
-    if (options) {
-        console.log(options);
-    }
-
     if (!testsPath) {
         throw new Error();
     }
 
-    cp.spawnSync(`bats ${testsPath}`);
+    let command = `bats ${testsPath}`;
+
+    if (options && 'count' in options) {
+        command += ' --count';
+    }
+
+    cp.spawnSync(command);
 }
 
 export default {

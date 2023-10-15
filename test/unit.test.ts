@@ -23,7 +23,7 @@ describe('Bats JS SDK', function () {
         sandbox.restore();
     });
 
-    it('requires a tests path', function () {
+    it('fails without a tests path', function () {
         // @ts-expect-error
         expect(() => bats.run()).to.throw(Error);
     });
@@ -41,5 +41,12 @@ describe('Bats JS SDK', function () {
 
         bats.run(testsPath);
         expect(spawnSyncSpy).to.have.been.calledWith(`bats ${testsPath}`);
+    });
+
+    it('calls the bats binary with the provided tests path and options', function () {
+        const spawnSyncSpy = sandbox.spy(cp, 'spawnSync');
+
+        bats.run(testsPath, { count: true });
+        expect(spawnSyncSpy).to.have.been.calledWith(`bats ${testsPath} --count`);
     });
 });
