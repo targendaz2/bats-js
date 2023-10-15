@@ -13,28 +13,33 @@ chai.use(sinonChai);
 describe('Bats JS SDK', function () {
     const testsPath = './fixtures/project/test';
 
+    let sandbox: sinon.SinonSandbox;
+
+    this.beforeEach(function () {
+        sandbox = sinon.createSandbox();
+    });
+
+    this.afterEach(function () {
+        sandbox.restore();
+    });
+
     it('requires a tests path', function () {
         // @ts-expect-error
-        expect(() => bats()).to.throw(Error);
+        expect(() => bats.run()).to.throw(Error);
     });
 
     it('accepts a tests path', function () {
-        expect(() => bats(testsPath)).not.to.throw(Error);
+        expect(() => bats.run(testsPath)).not.to.throw(Error);
     });
 
     it('accepts CLI options', function () {
-        expect(() => bats(testsPath, {})).not.to.throw(Error);
+        expect(() => bats.run(testsPath, {})).not.to.throw(Error);
     });
 
-    it('calls the bats binary', function () {
-        const sandbox = sinon.createSandbox();
+    it('calls the bats binary with the provided tests path', function () {
         const spawnSyncSpy = sandbox.spy(cp, 'spawnSync');
 
-        after(function () {
-            sandbox.restore();
-        });
-
-        bats(testsPath);
-        expect(spawnSyncSpy).to.have.been.called;
+        bats.run(testsPath);
+        expect(spawnSyncSpy).to.have.been.calledWith(`bats ${testsPath}`);
     });
 });
