@@ -10,7 +10,7 @@ import bats from '../src';
 chai.use(sinonChai);
 
 
-describe('Bats JS SDK', function () {
+describe('Bats run() method', function () {
     const testsPath = './fixtures/project/test';
 
     let sandbox: sinon.SinonSandbox;
