@@ -3,11 +3,12 @@ import { expect } from 'chai';
 import { formatOption } from '../src/formatting';
 
 
-type ArrayOptionToFormat = [string, string[], string];
-type BooleanOptionToFormat = [string, boolean, string];
-type NumberOptionToFormat = [string, number, string];
-type StringOptionToFormat = [string, string, string];
-type OptionToFormat = ArrayOptionToFormat | BooleanOptionToFormat | NumberOptionToFormat | StringOptionToFormat;
+type ArrayOptionToFormat = [string, string[], string | null];
+type BooleanOptionToFormat = [string, boolean, string | null];
+type NumberOptionToFormat = [string, number, string | null];
+type RegExpOptionToFormat = [string, RegExp, string | null];
+type StringOptionToFormat = [string, string, string | null];
+type OptionToFormat = ArrayOptionToFormat | BooleanOptionToFormat | NumberOptionToFormat | RegExpOptionToFormat | StringOptionToFormat;
 
 describe('options formatting tests', function () {
     const testOptionFormatting = (optionToFormat: OptionToFormat) => function () {
@@ -20,29 +21,29 @@ describe('options formatting tests', function () {
     describe('format boolean options', function () {
         const booleanOptionsToFormat: BooleanOptionToFormat[] = [
             ['count', true, '--count'],
-            ['count', false, ''],
+            ['count', false, null],
             ['noTempdirCleanup', true, '--no-tempdir-cleanup'],
-            ['noTempdirCleanup', false, ''],
+            ['noTempdirCleanup', false, null],
             ['noParallelizeAcrossFiles', true, '--no-parallelize-across-files'],
-            ['noParallelizeAcrossFiles', false, ''],
+            ['noParallelizeAcrossFiles', false, null],
             ['noParallelizeWithinFiles', true, '--no-parallelize-within-files'],
-            ['noParallelizeWithinFiles', false, ''],
+            ['noParallelizeWithinFiles', false, null],
             ['pretty', true, '--pretty'],
-            ['pretty', false, ''],
+            ['pretty', false, null],
             ['printOutputOnFailure', true, '--print-output-on-failure'],
-            ['printOutputOnFailure', false, ''],
+            ['printOutputOnFailure', false, null],
             ['recursive', true, '--recursive'],
-            ['recursive', false, ''],
+            ['recursive', false, null],
             ['showOutputOfPassingTests', true, '--show-output-of-passing-tests'],
-            ['showOutputOfPassingTests', false, ''],
+            ['showOutputOfPassingTests', false, null],
             ['tap', true, '--tap'],
-            ['tap', false, ''],
+            ['tap', false, null],
             ['timing', true, '--timing'],
-            ['timing', false, ''],
+            ['timing', false, null],
             ['trace', true, '--trace'],
-            ['trace', false, ''],
+            ['trace', false, null],
             ['verboseRun', true, '--verbose-run'],
-            ['verboseRun', false, ''],
+            ['verboseRun', false, null],
         ];
 
         booleanOptionsToFormat.forEach(optionToFormat => {
@@ -110,11 +111,24 @@ describe('options formatting tests', function () {
             it(testName, testOptionFormatting(optionToFormat));
         });
     });
+
+    describe('format regexp options', function () {
+        const regExpOptionsToFormat: RegExpOptionToFormat[] = [
+            ['filter', /addition/, '--filter "addition"'],
+        ];
+
+        regExpOptionsToFormat.forEach(optionToFormat => {
+            const [key, value] = optionToFormat;
+            const testName = `format { ${key}: ${value} }`;
+
+            it(testName, testOptionFormatting(optionToFormat));
+        });
+    });
     // const optionsToFormat: OptionToFormat[] = [
     //     ['count', true, '--count'],
-    //     ['count', false, ''],
+    //     ['count', false, null],
     //     ['codeQuoteStyle', '""', '--code-quote-style "\\"\\""'],
-    //     ['codeQuoteStyle', '\'\'', '--code-quote-style "\'\'"'],
+    //     ['codeQuoteStyle', '\'\null, '--code-quote-style "\'\'"'],
     //     ['codeQuoteStyle', '||', '--code-quote-style "||"'],
     //     ['codeQuoteStyle', 'custom', '--code-quote-style "custom"'],
     //     ['lineReferenceFormat', 'comma_line', '--line-reference-format "comma_line"'],
@@ -136,26 +150,26 @@ describe('options formatting tests', function () {
     //     ['jobs', 3, '--jobs 3'],
     //     ['parallelBinaryName', 'parallel', '--parallel-binary-name "parallel"'],
     //     ['noTempdirCleanup', true, '--no-tempdir-cleanup'],
-    //     ['noTempdirCleanup', false, ''],
+    //     ['noTempdirCleanup', false, null],
     //     ['noParallelizeAcrossFiles', true, '--no-parallelize-across-files'],
-    //     ['noParallelizeAcrossFiles', false, ''],
+    //     ['noParallelizeAcrossFiles', false, null],
     //     ['noParallelizeWithinFiles', true, '--no-parallelize-within-files'],
-    //     ['noParallelizeWithinFiles', false, ''],
+    //     ['noParallelizeWithinFiles', false, null],
     //     ['pretty', true, '--pretty'],
-    //     ['pretty', false, ''],
+    //     ['pretty', false, null],
     //     ['printOutputOnFailure', true, '--print-output-on-failure'],
-    //     ['printOutputOnFailure', false, ''],
+    //     ['printOutputOnFailure', false, null],
     //     ['recursive', true, '--recursive'],
-    //     ['recursive', false, ''],
+    //     ['recursive', false, null],
     //     ['showOutputOfPassingTests', true, '--show-output-of-passing-tests'],
-    //     ['showOutputOfPassingTests', false, ''],
+    //     ['showOutputOfPassingTests', false, null],
     //     ['tap', true, '--tap'],
-    //     ['tap', false, ''],
+    //     ['tap', false, null],
     //     ['timing', true, '--timing'],
-    //     ['timing', false, ''],
+    //     ['timing', false, null],
     //     ['trace', true, '--trace'],
-    //     ['trace', false, ''],
+    //     ['trace', false, null],
     //     ['verboseRun', true, '--verbose-run'],
-    //     ['verboseRun', false, ''],
+    //     ['verboseRun', false, null],
     // ];
 });
