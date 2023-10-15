@@ -4,7 +4,7 @@ import * as sinon from 'sinon';
 import chai, { expect } from 'chai';
 import sinonChai from 'sinon-chai';
 
-import bats from '../src/main';
+import bats from '../src';
 
 
 chai.use(sinonChai);
