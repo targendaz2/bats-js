@@ -3,9 +3,10 @@ import { expect } from 'chai';
 import { formatOption } from '../src/formatting';
 
 
+type ArrayOptionToFormat = [string, string[], string];
 type BooleanOptionToFormat = [string, boolean, string];
 type StringOptionToFormat = [string, string, string];
-type OptionToFormat = BooleanOptionToFormat | StringOptionToFormat;
+type OptionToFormat = ArrayOptionToFormat | BooleanOptionToFormat | StringOptionToFormat;
 
 describe('options formatting tests', function () {
     const testOptionFormatting = (optionToFormat: OptionToFormat) => function () {
@@ -72,6 +73,21 @@ describe('options formatting tests', function () {
         ];
 
         stringOptionsToFormat.forEach(optionToFormat => {
+            const [key, value] = optionToFormat;
+            const testName = `format { ${key}: ${value} }`;
+
+            it(testName, testOptionFormatting(optionToFormat));
+        });
+    });
+
+    describe('format array options', function () {
+        const arrayOptionsToFormat: ArrayOptionToFormat[] = [
+            ['filterTags', ['tag1'], '--filter-tags "tag1"'],
+            ['filterTags', ['tag1,tag2'], '--filter-tags "tag1,tag2"'],
+            ['filterTags', ['tag1,tag2,tag3'], '--filter-tags "tag1,tag2,tag3"'],
+        ];
+
+        arrayOptionsToFormat.forEach(optionToFormat => {
             const [key, value] = optionToFormat;
             const testName = `format { ${key}: ${value} }`;
 

@@ -1,7 +1,7 @@
 import { escape } from 'shellwords';
 import kebabCase from 'lodash.kebabcase';
 
-export function formatOption(name: string, value: boolean | string) {
+export function formatOption(name: string, value: boolean | string | string[]) {
     let formattedOption: string;
 
     if (value) {
@@ -12,6 +12,8 @@ export function formatOption(name: string, value: boolean | string) {
 
     if (typeof value === 'string') {
         formattedOption += ` "${escape(value)}"`;
+    } else if (value instanceof Array) {
+        formattedOption += ` "${value.toString()}"`;
     }
 
     return formattedOption;
