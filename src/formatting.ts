@@ -1,8 +1,11 @@
 import { escape } from 'shellwords';
 import kebabCase from 'lodash.kebabcase';
 
-export function formatOption(name: string, value: boolean | number | RegExp | string | string[]) {
-    let formattedOption: string;
+import { BatsOptions, BatsOptionValue } from './options';
+
+
+export function formatOption(name: string, value: BatsOptionValue) {
+    let formattedOption = '';
 
     if (value) {
         formattedOption = `--${kebabCase(name)}`;
@@ -21,4 +24,19 @@ export function formatOption(name: string, value: boolean | number | RegExp | st
     }
 
     return formattedOption;
+}
+
+export function formatOptions(options: BatsOptions) {
+    let formattedOptions = '';
+
+    Object.entries(options).forEach(([name, value]) => {
+        const formattedOption = formatOption(name, value);
+        if (formattedOption) formattedOptions += `${formattedOption} `;
+    });
+
+    if (formattedOptions) {
+        return formattedOptions.trimEnd();
+    } else {
+        return null;
+    }
 }

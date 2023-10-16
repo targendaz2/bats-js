@@ -1,9 +1,10 @@
 import { expect } from 'chai';
 
-import { formatOption } from '../src/formatting';
+import { formatOption, formatOptions } from '../src/formatting';
+import { BatsOptionValue } from '../src/options';
 
-type OptionValue = boolean | number | RegExp | string | string[]
-type OptionToFormat = [string, OptionValue, string | null];
+
+type OptionToFormat = [string, BatsOptionValue, string | null];
 
 describe('single option formatting tests', function () {
     const optionsToFormat: OptionToFormat[] = [
@@ -70,33 +71,30 @@ describe('single option formatting tests', function () {
     });
 });
 
-// type OptionsToFormat = [{ [key: string]: OptionValue }, string | null];
+type OptionsToTest = [{ [key: string]: BatsOptionValue }, string | null];
 
-// describe('multiple options formatting tests', function () {
-//     const optionsToFormat: OptionsToFormat[] = [
-//         [{count: true, recursive: true}, '--count --recursive'],
-//         [{count: false, recursive: true}, '--recursive'],
-//         [{count: false, recursive: false}, null],
-//         [{count: true, filter: /addition/, recursive: true}, '--count --filter "addition" --recursive'],
-//         [{count: false, filter: /addition/, recursive: false}, '--filter "addition"'],
-//         [{filterTags: ['tag1'], recursive: true}, '--filter-tags "tag1"'],
-//         ['filterTags', ['tag1,tag2'], '--filter-tags "tag1,tag2"'],
-//         ['filterTags', ['tag1,tag2,tag3'], '--filter-tags "tag1,tag2,tag3"'],
-//         ['noTempdirCleanup', true, '--no-tempdir-cleanup'],
-//         ['noTempdirCleanup', false, null],
-//     ];
+describe('multiple options formatting tests', function () {
+    const optionsToTest: OptionsToTest[] = [
+        [{count: true, recursive: true}, '--count --recursive'],
+        [{count: false, recursive: true}, '--recursive'],
+        [{count: false, recursive: false}, null],
+        [{count: true, filter: /addition/, recursive: true}, '--count --filter "addition" --recursive'],
+        [{count: false, filter: /addition/, recursive: false}, '--filter "addition"'],
+        [{filterTags: ['tag1', 'tag2'], recursive: true}, '--filter-tags "tag1,tag2" --recursive'],
+        [{ count: true, recursive: true, noTempdirCleanup: true }, '--count --recursive --no-tempdir-cleanup'],
+    ];
 
-//     const testOptionFormatting = (optionToFormat: OptionToFormat) => function () {
-//         const [key, value, expectedOutput] = optionToFormat;
-//         const formattedOption = formatOption(key, value);
+    const testOptionsFormatting = (optionsToTest: OptionsToTest) => function () {
+        const [optionsToFormat, expectedOutput] = optionsToTest;
+        const formattedOptions = formatOptions(optionsToFormat);
 
-//         expect(formattedOption).to.equal(expectedOutput);
-//     };
+        expect(formattedOptions).to.equal(expectedOutput);
+    };
 
-//     optionsToFormat.forEach(optionToFormat => {
-//         const [key, value] = optionToFormat;
-//         const testName = `format { ${key}: ${value} }`;
+    optionsToTest.forEach(optionToTest => {
+        const [optionsToFormat] = optionToTest;
+        const testName = `format ${optionsToFormat.toString()}`;
 
-//         it(testName, testOptionFormatting(optionToFormat));
-//     });
-// });
+        it(testName, testOptionsFormatting(optionToTest));
+    });
+});
