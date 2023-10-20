@@ -1,4 +1,4 @@
-FROM node:lts
+FROM --platform=amd64 node:lts
 
 RUN apt-get update && \
     apt-get install -y git gnupg2 zsh
@@ -9,8 +9,6 @@ COPY ["package.json", "package-lock.json*", "./"]
 
 RUN npm install -g npm@10.2.0 && \
     npm install --silent
-
-COPY . .
 
 RUN chown -R node /workspaces/bats-js
 
