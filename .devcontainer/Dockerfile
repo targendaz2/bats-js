@@ -1,7 +1,12 @@
 FROM --platform=amd64 node:lts
 
 RUN apt-get update && \
-    apt-get install -y git gnupg2 zsh
+    apt-get install -y \
+        bc dc parallel \
+        curl git gnupg2 zsh
+
+RUN curl -sL https://github.com/shenwei356/rush/releases/download/v0.5.3/rush_linux_amd64.tar.gz | tar xvz && \
+    mv rush /usr/local/bin/
 
 WORKDIR /workspaces/bats-js
 

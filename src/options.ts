@@ -46,7 +46,7 @@ export type BatsOptions = {
     jobs?: number,
 
     /** Name of parallel binary */
-    parallelBinaryName?: string,
+    parallelBinaryName?: 'parallel' | 'rush',
 
     /** Preserve test output temporary directory */
     noTempdirCleanup?: boolean,
