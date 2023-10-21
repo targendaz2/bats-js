@@ -1,4 +1,6 @@
-import * as cp from 'node:child_process';
+import cp from 'node:child_process';
+
+import { BatsOptions } from './options';
 
 /**
  * Runs a Bats command
@@ -6,10 +8,9 @@ import * as cp from 'node:child_process';
  * @param testsPath - path to a Bats test file or a directory containing Bats test files
  * @param options - Bats command line options
  */
-function run(testsPath: string, options?: object) {
-    if (!testsPath) {
-        throw new Error();
-    }
+function run(testsPath: string, options?: BatsOptions) {
+    // TODO: DRY
+    if (!testsPath) throw new Error();
 
     let command = `bats ${testsPath}`;
 
@@ -20,6 +21,16 @@ function run(testsPath: string, options?: object) {
     cp.spawnSync(command);
 }
 
-export default {
-    run
+function count(testsPath: string, options?: BatsOptions) {
+    bats.run(testsPath, {
+        ...options,
+        count: true,
+    });
+}
+
+const bats = {
+    run,
+    count
 };
+
+export default bats;

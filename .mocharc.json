@@ -1,12 +1,12 @@
 {
-    "$schema": "https://json.schemastore.org/mocharc",
-    "color": true,
-    "enable-source-maps": true,
-    "extension": [
-        "ts"
-    ],
-    "recursive": true,
-    "require": "ts-node/register",
-    "slow": 1800,
-    "timeout": 10000
+  "$schema": "https://json.schemastore.org/mocharc",
+  "color": true,
+  "enable-source-maps": true,
+  "extension": [
+    "ts"
+  ],
+  "recursive": true,
+  "require": "ts-node/register",
+  "slow": 1800,
+  "timeout": 10000
 }

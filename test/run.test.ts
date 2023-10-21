@@ -33,7 +33,7 @@ describe('Bats run() method', function () {
     });
 
     it('accepts CLI options', function () {
-        expect(() => bats.run(testsPath, {})).not.to.throw(Error);
+        expect(() => bats.run(testsPath, { recursive: true })).not.to.throw(Error);
     });
 
     it('calls the bats binary with the provided tests path', function () {
