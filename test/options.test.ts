@@ -1,12 +1,18 @@
+import cp from 'node:child_process';
+
+// import { escape } from 'shellwords';
 import { expect } from 'chai';
 
+import { BatsOptions, BatsOptionValue } from '../src/options';
 import { formatOption, formatOptions } from '../src/formatting';
-import { BatsOptionValue } from '../src/options';
+
+import bats from '../src';
+import { BatsResult } from '../src/result';
 
 
 type OptionToFormat = [string, BatsOptionValue, string | null];
 
-describe('single option formatting tests', function () {
+describe('single option formatting function', function () {
     const optionsToFormat: OptionToFormat[] = [
         ['count', true, '--count'],
         ['count', false, null],
@@ -32,6 +38,7 @@ describe('single option formatting tests', function () {
         ['jobs', 1, '--jobs 1'],
         ['jobs', 3, '--jobs 3'],
         ['parallelBinaryName', 'parallel', '--parallel-binary-name "parallel"'],
+        ['parallelBinaryName', 'rush', '--parallel-binary-name "rush"'],
         ['noTempdirCleanup', true, '--no-tempdir-cleanup'],
         ['noTempdirCleanup', false, null],
         ['noParallelizeAcrossFiles', true, '--no-parallelize-across-files'],
@@ -65,15 +72,13 @@ describe('single option formatting tests', function () {
 
     optionsToFormat.forEach(optionToFormat => {
         const [key, value] = optionToFormat;
-        const testName = `format { ${key}: ${value} }`;
-
-        it(testName, testOptionFormatting(optionToFormat));
+        it(`formats { ${key}: ${value} }`, testOptionFormatting(optionToFormat));
     });
 });
 
 type OptionsToTest = [{ [key: string]: BatsOptionValue }, string | null];
 
-describe('multiple options formatting tests', function () {
+describe('multiple options formatting function', function () {
     const optionsToTest: OptionsToTest[] = [
         [{count: true, recursive: true}, '--count --recursive'],
         [{count: false, recursive: true}, '--recursive'],
@@ -93,8 +98,84 @@ describe('multiple options formatting tests', function () {
 
     optionsToTest.forEach(optionToTest => {
         const [optionsToFormat] = optionToTest;
-        const testName = `format ${optionsToFormat.toString()}`;
 
-        it(testName, testOptionsFormatting(optionToTest));
+        let optionsAsString = '{';
+        Object.entries(optionsToFormat).forEach(([name, value]) => {
+            optionsAsString += ` ${name}: ${value!.toString()},`;
+        });
+        optionsAsString = optionsAsString.slice(0, -1);
+        optionsAsString += ' }';
+
+        it(`formats ${optionsAsString}`, testOptionsFormatting(optionToTest));
+    });
+});
+
+describe('option parity', function () {
+    const testsPath = './fixtures/addition.bats';
+
+    const optionsToTest: BatsOptions[] = [
+        { count: true },
+        // { codeQuoteStyle: '""' },
+        // { codeQuoteStyle: '\'\'' },
+        // { codeQuoteStyle: '||' },
+        // { codeQuoteStyle: 'custom' },
+        // { lineReferenceFormat: 'comma_line' },
+        // { lineReferenceFormat: 'colon' },
+        // { lineReferenceFormat: 'uri' },
+        // { lineReferenceFormat: 'custom' },
+        // { filter: /addition/ },
+        // { filterStatus: 'failed' },
+        // { filterStatus: 'missed' },
+        // { filterTags: 'tag1' },
+        // { filterTags: ['tag1'] },
+        // { filterTags: ['tag1', 'tag2'] },
+        // { filterTags: ['tag1', 'tag2', 'tag3'] },
+        // { formatter: 'pretty' },
+        // { formatter: 'tap' },
+        // { formatter: 'tap13' },
+        // { formatter: 'junit' },
+        // { jobs: 1 },
+        // { jobs: 3 },
+        // { parallelBinaryName: 'parallel' },
+        // { parallelBinaryName: 'rush' },
+        // { noTempdirCleanup: true },
+        // { noParallelizeAcrossFiles: true },
+        // { noParallelizeWithinFiles: true },
+        // { pretty: true },
+        // { printOutputOnFailure: true },
+        // { recursive: true },
+        // { showOutputOfPassingTests: true },
+        // { tap: true },
+        // { timing: true },
+        // { trace: true },
+        // { verboseRun: true },
+    ];
+
+    const testOptionParity = (options: BatsOptions) => function () {
+        // const command = `bats ${testsPath} ${formatOptions(options)}`;
+        const command = `bats ${testsPath} --count`;
+        const result = cp.spawnSync(command, { shell: true });
+
+        const expectedResult = new BatsResult();
+        expectedResult.exitCode = result.status;
+        expectedResult.output = result.stdout.toString();
+
+        const actualResult = bats(testsPath, options);
+
+        expect(expectedResult.exitCode).to.equal(0);
+        expect(actualResult.exitCode).to.equal(0);
+        expect(expectedResult.output).to.equal(actualResult.output);
+    };
+
+    optionsToTest.forEach(options => {
+        let optionsAsString = '{';
+        Object.entries(options).forEach(([name, value]) => {
+            optionsAsString += ` ${name}: ${value!.toString()},`;
+        });
+
+        optionsAsString = optionsAsString.slice(0, -1);
+        optionsAsString += ' }';
+
+        it(`has parity for ${optionsAsString}`, testOptionParity(options));
     });
 });
